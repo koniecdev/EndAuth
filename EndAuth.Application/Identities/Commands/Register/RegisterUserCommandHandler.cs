@@ -21,6 +21,11 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
             Email = request.Email,
             UserName = request.Username
         };
+        if (await _userManager.FindByNameAsync(applicationUser.UserName) is not null
+            || await _userManager.FindByEmailAsync(applicationUser.Email) is not null)
+        {
+            return new(new ResourceAlreadyExistsException(nameof(ApplicationUser), applicationUser.UserName));
+        }
         IdentityResult result = await _userManager.CreateAsync(applicationUser, request.Password);
         return result.Succeeded ? applicationUser.Id : new Result<string>(new IdentityResultFailedException(result.Errors));
     }

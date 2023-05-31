@@ -72,6 +72,7 @@ builder.Services.AddAuthentication(m =>
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddAuthorization();
+
 builder.Services.AddJwtProvider();
 builder.Services.AddApplication();
 builder.Services.AddPersistance(builder.Configuration);

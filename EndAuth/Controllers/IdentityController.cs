@@ -1,12 +1,11 @@
 using EndAuth.Shared.Identities.Commands.Register;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using LanguageExt;
-using LanguageExt.Common;
-using EndAuth.Application.Common.Mappings.Errors;
 using EndAuth.Shared.Identities.Commands.Refresh;
-using EndAuth.Shared.Dtos;
 using EndAuth.Shared.Identities.Commands.Login;
+using EndAuth.Application.Extensions;
+using System.Security.Authentication;
+using EndAuth.Application.Common.Exceptions;
 
 namespace EndAuth.Controllers;
 
@@ -32,7 +31,11 @@ public class IdentityController : ControllerBase
     public async Task<IActionResult> Login([FromBody]LoginUserCommand loginDto)
     {
         var result = await _mediator.Send(loginDto);
-        return result.Match<IActionResult>(m => Ok(m), e => BadRequest(e.MapToResponse()));
+        return result.Match<IActionResult>(m => Ok(m), e => e switch
+        {
+            ResourceNotFoundException => NotFound(e.MapToResponse()),
+            _ => BadRequest(e.MapToResponse())
+        });
     }
 
     [HttpPost("refresh")]

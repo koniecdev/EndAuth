@@ -5,11 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UnitTests.Application.Common;
 
@@ -54,6 +49,22 @@ public class FakeUserManagerBuilder
     }
 
     public Mock<FakeUserManager> Build()
+    {
+        return _mock;
+    }
+}
+
+public class FakeSignInManagerBuilder
+{
+    private readonly Mock<FakeSignInManager> _mock = new();
+
+    public FakeSignInManagerBuilder With(Action<Mock<FakeSignInManager>> mock)
+    {
+        mock(_mock);
+        return this;
+    }
+
+    public Mock<FakeSignInManager> Build()
     {
         return _mock;
     }

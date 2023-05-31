@@ -1,6 +1,4 @@
 using EndAuth.Persistance.Contexts.IdentityDb;
-using FluentValidation;
-using Moq;
 
 namespace UnitTests.Application.Common;
 

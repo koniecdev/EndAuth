@@ -1,5 +1,4 @@
-﻿using EndAuth.Application.Common.Interfaces;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System.Text;
 
 namespace EndAuth.Application.Common.Exceptions;
