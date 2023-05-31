@@ -1,11 +1,12 @@
-using EndAuth.Model;
+using EndAuth.Shared.Identities.Commands.Register;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Runtime.CompilerServices;
-using System.Security.Claims;
-using System.Text;
-using System.Text.Json;
+using LanguageExt;
+using LanguageExt.Common;
+using EndAuth.Application.Common.Mappings.Errors;
+using EndAuth.Shared.Identities.Commands.Refresh;
+using EndAuth.Shared.Dtos;
+using EndAuth.Shared.Identities.Commands.Login;
 
 namespace EndAuth.Controllers;
 
@@ -13,27 +14,32 @@ namespace EndAuth.Controllers;
 [Route("/api/identities")]
 public class IdentityController : ControllerBase
 {
-    public IdentityController()
+    private readonly IMediator _mediator;
+
+    public IdentityController(IMediator mediator)
     {
-        
+        _mediator = mediator;
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody]RegisterDto registerDto, CancellationToken ct = default)
+    public async Task<IActionResult> Register([FromBody]RegisterUserCommand registerDto)
     {
-        return Ok("");
+        var result = await _mediator.Send(registerDto);
+        return result.Match<IActionResult>(m => Ok(m), e => BadRequest(e.MapToResponse()));
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody]LoginDto registerDto, CancellationToken ct = default)
+    public async Task<IActionResult> Login([FromBody]LoginUserCommand loginDto)
     {
-        return Ok("");
+        var result = await _mediator.Send(loginDto);
+        return result.Match<IActionResult>(m => Ok(m), e => BadRequest(e.MapToResponse()));
     }
 
     [HttpPost("refresh")]
-    public async Task<IActionResult> Refresh([FromBody] RefreshTokensDto refreshTokensDto, CancellationToken ct = default)
+    public async Task<IActionResult> Refresh([FromBody]RefreshTokensCommand refreshTokensDto)
     {
-        return Ok("");
+        var result = await _mediator.Send(refreshTokensDto);
+        return result.Match<IActionResult>(m => Ok(m), e => BadRequest(e.MapToResponse()));
     }
 
     //private const string TokenSecret = "ForTheLoveOfGodStoreAndLoadThisSecurely";
