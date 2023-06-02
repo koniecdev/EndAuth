@@ -9,48 +9,48 @@ using System.Security.Claims;
 using System.Text;
 
 namespace EndAuth.JwtProvider.Services;
-public class JwtService : IJwtService
+public class JwtService<TUser> : IJwtService<TUser> where TUser : IdentityUser
 {
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<TUser> _userManager;
     private readonly IConfiguration _configuration;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public JwtService(UserManager<ApplicationUser> userManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+    public JwtService(UserManager<TUser> userManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
         _userManager = userManager;
         _configuration = configuration;
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<string> CreateTokenAsync()
+    public async Task<string> CreateTokenAsync(string email)
     {
         var signingCredentials = GetSigningCredentials();
-        var claims = await GetClaims();
+        var claims = await GetClaims(email);
         var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
         return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
     }
 
     private SigningCredentials GetSigningCredentials()
     {
-        var jwtConfig = _configuration.GetSection("jwtConfig");
-        var key = Encoding.UTF8.GetBytes(jwtConfig["Secret"]);
+        var jwtConfig = _configuration.GetSection("JwtSettings");
+        var key = Encoding.UTF8.GetBytes(jwtConfig["Key"]);
         var secret = new SymmetricSecurityKey(key);
         return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
     }
 
-    private async Task<List<Claim>> GetClaims()
+    private async Task<List<Claim>> GetClaims(string email)
     {
         if (_httpContextAccessor.HttpContext == null)
         {
             throw new Exception();
         }
-        if (_httpContextAccessor.HttpContext.User.HasClaim(m => m.Type == ClaimTypes.Email))
+        if (!string.IsNullOrWhiteSpace(email))
         {
-            var user = await _userManager.FindByEmailAsync(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(m => m.Type == ClaimTypes.Email)!.Value);
+            var user = await _userManager.FindByEmailAsync(email);
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Name, user.Email)
+                new Claim(ClaimTypes.Email, user.Email)
             };
             var roles = await _userManager.GetRolesAsync(user);
             foreach (var role in roles)
@@ -64,13 +64,13 @@ public class JwtService : IJwtService
 
     private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
     {
-        var jwtSettings = _configuration.GetSection("JwtConfig");
+        var jwtSettings = _configuration.GetSection("JwtSettings");
         var tokenOptions = new JwtSecurityToken
         (
-        issuer: jwtSettings["validIssuer"],
-        audience: jwtSettings["validAudience"],
+        issuer: jwtSettings["Issuer"],
+        audience: jwtSettings["Audience"],
         claims: claims,
-        expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["expiresIn"])),
+        expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["ExpiresIn"])),
         signingCredentials: signingCredentials
         );
         return tokenOptions;

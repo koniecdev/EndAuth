@@ -11,7 +11,7 @@ public static class DependencyInjection
     public static IServiceCollection AddJwtProvider(this IServiceCollection services)
     {
         services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-        services.AddScoped<IJwtService, JwtService>();
+        services.TryAddScoped(typeof(IJwtService<>), typeof(JwtService<>));
         return services;
     }
 }

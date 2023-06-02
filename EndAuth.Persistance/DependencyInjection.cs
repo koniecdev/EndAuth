@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using EndAuth.Domain;
 using EndAuth.Persistance.Contexts.IdentityDb;
 using EndAuth.Application.Common.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace EndAuth.Persistance;
 
@@ -11,10 +12,7 @@ public static class DependencyInjection{
     public static IServiceCollection AddPersistance(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<IdentityContext>(o => o.UseSqlServer(configuration.GetConnectionString("DefaultDatabase")));
-        services.AddDefaultIdentity<ApplicationUser>(o =>
-        {
-            o.User.RequireUniqueEmail = true;
-        }).AddEntityFrameworkStores<IdentityContext>();
+        services.AddDefaultIdentity<ApplicationUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
         services.AddScoped<IIdentityContext, IdentityContext>(); 
         return services;
     }

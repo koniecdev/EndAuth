@@ -1,5 +1,7 @@
+using EndAuth.Application.Common.Interfaces;
 using EndAuth.Application.Identities.Commands.Login;
 using EndAuth.Domain;
+using EndAuth.JwtProvider.Services;
 using EndAuth.Shared.Identities.Commands.Login;
 using FluentAssertions;
 using FluentValidation;
@@ -28,19 +30,19 @@ public class LoginUserCommandHandlerTest : CommandTestBase
         .ReturnsAsync(appUser))
         .Build();
         var fakeSignInManager = new FakeSignInManagerBuilder()
-        .With(x => x.Setup(sm => sm.PasswordSignInAsync(It.IsAny<ApplicationUser>(),
+        .With(x => x.Setup(sm => sm.CheckPasswordSignInAsync(It.IsAny<ApplicationUser>(),
                 It.IsAny<string>(),
-                It.IsAny<bool>(),
                 It.IsAny<bool>()))
         .ReturnsAsync(SignInResult.Failed))
-        .With(x => x.Setup(sm => sm.PasswordSignInAsync(
+        .With(x => x.Setup(sm => sm.CheckPasswordSignInAsync(
                 It.Is<ApplicationUser>(m=>m.Equals(appUser)),
                 It.Is<string>(xd => xd == "Default123$"),
-                It.IsAny<bool>(),
                 It.IsAny<bool>()))
         .ReturnsAsync(SignInResult.Success))
         .Build();
-        _handler = new(fakeUserManager.Object, fakeSignInManager.Object);
+        var jwtServiceMock = new Mock<IJwtService<ApplicationUser>>();
+        jwtServiceMock.Setup(m => m.CreateTokenAsync("Default@example.com")).ReturnsAsync("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRGVmYXVsdCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6IkRlZmF1bHRAZXhhbXBsZS5jb20iLCJleHAiOjE2ODU2OTE1MDgsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcyMDciLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MTcxIn0.mVGcL8gpdg_w_yO3Prcl6f2LqQ8JpeWIddZoRa-azlY");
+        _handler = new(jwtServiceMock.Object, fakeUserManager.Object, fakeSignInManager.Object);
         _validator = new();
     }
 

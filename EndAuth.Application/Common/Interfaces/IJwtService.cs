@@ -1,6 +1,6 @@
 ﻿namespace EndAuth.Application.Common.Interfaces;
 
-public interface IJwtService
+public interface IJwtService<TUser>
 {
-    Task<string> CreateTokenAsync();
+    Task<string> CreateTokenAsync(string email);
 }

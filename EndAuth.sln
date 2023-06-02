@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EndAuth.JwtProvider", "EndA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{48425A14-54DD-4467-AC8B-16BA7B860380}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests.Application", "UnitTests.Application\UnitTests.Application.csproj", "{1781EE73-A2B2-455A-867D-B5581C5CDFAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests.Application", "UnitTests.Application\UnitTests.Application.csproj", "{1781EE73-A2B2-455A-867D-B5581C5CDFAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndAuthSimpleClient", "EndAuthSimpleClient\EndAuthSimpleClient.csproj", "{CF3B1793-183A-4B6C-A0CA-2B96D140B977}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{1781EE73-A2B2-455A-867D-B5581C5CDFAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1781EE73-A2B2-455A-867D-B5581C5CDFAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1781EE73-A2B2-455A-867D-B5581C5CDFAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF3B1793-183A-4B6C-A0CA-2B96D140B977}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF3B1793-183A-4B6C-A0CA-2B96D140B977}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF3B1793-183A-4B6C-A0CA-2B96D140B977}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF3B1793-183A-4B6C-A0CA-2B96D140B977}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

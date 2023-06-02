@@ -40,14 +40,14 @@ builder.Services.AddSwaggerGen(m =>
 });
 
 var config = builder.Configuration;
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowedPolicies", corsBuilder =>
-//    {
-//        corsBuilder.WithOrigins("https://localhost:7074").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
-//    });
-//});
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowedPolicies", corsBuilder =>
+    {
+        corsBuilder.WithOrigins("https://localhost:7171").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+    });
+});
 
 builder.Services.AddAuthentication(m =>
 {
@@ -68,10 +68,9 @@ builder.Services.AddAuthentication(m =>
         ValidateIssuerSigningKey = true
     };
 });
+builder.Services.AddAuthorization();
 
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-builder.Services.AddAuthorization();
 
 builder.Services.AddJwtProvider();
 builder.Services.AddApplication();
@@ -88,7 +87,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
-//app.UseCors("AllowedPolicies");
+app.UseCors("AllowedPolicies");
 
 app.UseAuthorization();
 
