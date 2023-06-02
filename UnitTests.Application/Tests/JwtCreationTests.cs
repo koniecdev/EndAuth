@@ -1,6 +1,7 @@
 using Castle.Core.Configuration;
 using EndAuth.Application.Identities.Commands.Login;
-using EndAuth.Domain;
+using EndAuth.Domain.Entities;
+using EndAuth.JwtProvider;
 using EndAuth.JwtProvider.Services;
 using EndAuth.Shared.Identities.Commands.Login;
 using FluentAssertions;
@@ -66,7 +67,7 @@ public class JwtCreationTests : CommandTestBase
                 It.IsAny<bool>()))
         .ReturnsAsync(SignInResult.Success))
         .Build();
-        _service = new(fakeUserManager.Object, configuration, accessorMock.Object);
+        _service = new(fakeUserManager.Object, configuration, accessorMock.Object, new TokenParametersFactory(configuration), _context);
     }
 
     [Fact]

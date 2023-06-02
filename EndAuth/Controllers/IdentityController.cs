@@ -6,10 +6,12 @@ using EndAuth.Shared.Identities.Commands.Login;
 using EndAuth.Application.Extensions;
 using System.Security.Authentication;
 using EndAuth.Application.Common.Exceptions;
+using Microsoft.AspNetCore.Cors;
 
 namespace EndAuth.Controllers;
 
 [ApiController]
+[EnableCors("AllowedPolicies")]
 [Route("/api/identities")]
 public class IdentityController : ControllerBase
 {

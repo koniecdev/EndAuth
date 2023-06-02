@@ -5,6 +5,8 @@ using System.Text;
 using EndAuth.Persistance;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using EndAuth.Shared;
+using EndAuth.JwtProvider;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +51,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+
 builder.Services.AddAuthentication(m =>
 {
     m.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -57,16 +60,7 @@ builder.Services.AddAuthentication(m =>
 }).AddJwtBearer(m =>
 {
     m.SaveToken = true;
-    m.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidIssuer = config["JwtSettings:Issuer"],
-        ValidAudience = config["JwtSettings:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSettings:Key"]!)),
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true, 
-        ValidateIssuerSigningKey = true
-    };
+    m.TokenValidationParameters = new TokenParametersFactory(builder.Configuration).Create();
 });
 builder.Services.AddAuthorization();
 

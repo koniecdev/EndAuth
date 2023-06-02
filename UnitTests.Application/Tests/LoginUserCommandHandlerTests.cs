@@ -1,6 +1,7 @@
 using EndAuth.Application.Common.Interfaces;
 using EndAuth.Application.Identities.Commands.Login;
 using EndAuth.Domain;
+using EndAuth.Domain.Entities;
 using EndAuth.JwtProvider.Services;
 using EndAuth.Shared.Identities.Commands.Login;
 using FluentAssertions;
@@ -30,13 +31,15 @@ public class LoginUserCommandHandlerTest : CommandTestBase
         .ReturnsAsync(appUser))
         .Build();
         var fakeSignInManager = new FakeSignInManagerBuilder()
-        .With(x => x.Setup(sm => sm.CheckPasswordSignInAsync(It.IsAny<ApplicationUser>(),
+        .With(x => x.Setup(sm => sm.PasswordSignInAsync(It.IsAny<ApplicationUser>(),
                 It.IsAny<string>(),
+                It.IsAny<bool>(),
                 It.IsAny<bool>()))
         .ReturnsAsync(SignInResult.Failed))
-        .With(x => x.Setup(sm => sm.CheckPasswordSignInAsync(
+        .With(x => x.Setup(sm => sm.PasswordSignInAsync(
                 It.Is<ApplicationUser>(m=>m.Equals(appUser)),
                 It.Is<string>(xd => xd == "Default123$"),
+                It.IsAny<bool>(),
                 It.IsAny<bool>()))
         .ReturnsAsync(SignInResult.Success))
         .Build();

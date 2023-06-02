@@ -1,4 +1,4 @@
-﻿using EndAuth.Domain;
+﻿using EndAuth.Domain.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using EndAuth.Domain;
+using EndAuth.Domain.Entities;
 using EndAuth.Persistance.Contexts.IdentityDb;
 using EndAuth.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Identity;

@@ -1,11 +1,12 @@
 ﻿using EndAuth.Application.Common.Exceptions;
 using EndAuth.Application.Common.Interfaces;
-using EndAuth.Domain;
+using EndAuth.Domain.Entities;
+using EndAuth.Shared.Dtos;
 using EndAuth.Shared.Identities.Commands.Login;
 using Microsoft.AspNetCore.Identity;
 
 namespace EndAuth.Application.Identities.Commands.Login;
-public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result<string>>
+public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result<AuthSuccessResponse>>
 {
     private readonly IJwtService<ApplicationUser> _jwtService;
     private readonly UserManager<ApplicationUser> _userManager;
@@ -17,20 +18,22 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result<
         _userManager = userManager;
         _signInManager = signInManager;
     }
-    public async Task<Result<string>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+    public async Task<Result<AuthSuccessResponse>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
         ApplicationUser? userFromDb = await _userManager.FindByEmailAsync(request.Email);
         if(userFromDb is null)
         {
-            return new Result<string>(new ResourceNotFoundException(nameof(ApplicationUser), request.Email));
+            return new Result<AuthSuccessResponse>(new ResourceNotFoundException(nameof(ApplicationUser), request.Email));
         }
 
         SignInResult loginAttemptResults = await _signInManager.PasswordSignInAsync(userFromDb, request.Password, false, false);
         if (loginAttemptResults.Succeeded)
         {
-            //GENERATE JWT
-            return await _jwtService.CreateTokenAsync(request.Email);
+            string accessToken = await _jwtService.CreateTokenAsync(request.Email);
+            RefreshToken refreshToken = await _jwtService.CreateRefreshTokenAsync(request.Email);
+            AuthSuccessResponse response = new(accessToken, refreshToken.Token);
+            return response;
         }
-        return new Result<string>(new InvalidCredentialsException(request.Email));
+        return new Result<AuthSuccessResponse>(new InvalidCredentialsException(request.Email));
     }
 }

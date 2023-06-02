@@ -4,6 +4,7 @@ using EndAuth.Persistance.Contexts.IdentityDb;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EndAuth.Persistance.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20230602173050_AddRefreshTokenToDb")]
+    partial class AddRefreshTokenToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,13 +24,9 @@ namespace EndAuth.Persistance.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("EndAuth.Domain.Entities.RefreshToken", b =>
+            modelBuilder.Entity("EndAuth.Entities.RefreshToken", b =>
                 {
                     b.Property<string>("Token")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreationDate")
@@ -36,6 +34,10 @@ namespace EndAuth.Persistance.Migrations
 
                     b.Property<DateTime>("Expires")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("IdentityUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("Invalidated")
                         .HasColumnType("bit");
@@ -49,7 +51,7 @@ namespace EndAuth.Persistance.Migrations
 
                     b.HasKey("Token");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("IdentityUserId");
 
                     b.ToTable("RefreshTokens");
                 });
@@ -258,22 +260,22 @@ namespace EndAuth.Persistance.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("EndAuth.Domain.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("EndAuth.Domain.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
-            modelBuilder.Entity("EndAuth.Domain.Entities.RefreshToken", b =>
+            modelBuilder.Entity("EndAuth.Entities.RefreshToken", b =>
                 {
-                    b.HasOne("EndAuth.Domain.Entities.ApplicationUser", "ApplicationUser")
-                        .WithMany("RefreshTokens")
-                        .HasForeignKey("ApplicationUserId")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("IdentityUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.Navigation("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -325,11 +327,6 @@ namespace EndAuth.Persistance.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("EndAuth.Domain.Entities.ApplicationUser", b =>
-                {
-                    b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618
         }

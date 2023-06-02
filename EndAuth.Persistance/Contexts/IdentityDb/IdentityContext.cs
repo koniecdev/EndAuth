@@ -1,5 +1,5 @@
 ﻿using EndAuth.Application.Common.Interfaces;
-using EndAuth.Domain;
+using EndAuth.Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +12,7 @@ public class IdentityContext : IdentityDbContext, IIdentityContext
     }
 
     public DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
