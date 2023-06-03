@@ -4,7 +4,7 @@ using EndAuth.Shared.Dtos;
 using EndAuth.Shared.Identities.Commands.Refresh;
 
 namespace EndAuth.Application.Identities.Commands.Login;
-public class RefreshTokensCommandHandler : IRequestHandler<RefreshTokensCommand, Result<TokensResponse>>
+public class RefreshTokensCommandHandler : IRequestHandler<RefreshTokensCommand, Result<AuthSuccessResponse>>
 {
     private readonly IJwtService<ApplicationUser> _jwtService;
 
@@ -12,9 +12,9 @@ public class RefreshTokensCommandHandler : IRequestHandler<RefreshTokensCommand,
     {
         _jwtService = jwtService;
     }
-    public async Task<Result<TokensResponse>> Handle(RefreshTokensCommand request, CancellationToken cancellationToken)
+    public async Task<Result<AuthSuccessResponse>> Handle(RefreshTokensCommand request, CancellationToken cancellationToken)
     {
-        (string jwt, RefreshToken refreshToken) = await _jwtService.RefreshTokensAsync(request.Jwt, request.RefreshToken);
-        return new TokensResponse(jwt, refreshToken.Token, refreshToken.Expires);
+        (string jwt, RefreshToken refreshToken) = await _jwtService.RefreshTokensAsync(request.AccessToken, request.RefreshToken, cancellationToken);
+        return new AuthSuccessResponse(jwt, refreshToken.Token);
     }
 }

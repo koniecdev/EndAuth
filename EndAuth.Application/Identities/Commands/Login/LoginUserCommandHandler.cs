@@ -30,7 +30,7 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result<
         if (loginAttemptResults.Succeeded)
         {
             string accessToken = await _jwtService.CreateTokenAsync(request.Email);
-            RefreshToken refreshToken = await _jwtService.CreateRefreshTokenAsync(request.Email);
+            RefreshToken refreshToken = await _jwtService.CreateRefreshTokenAsync(request.Email, cancellationToken);
             AuthSuccessResponse response = new(accessToken, refreshToken.Token);
             return response;
         }

@@ -1,4 +1,5 @@
-﻿using EndAuth.Application.Common.Interfaces;
+﻿using EndAuth.Application.Common.Exceptions;
+using EndAuth.Application.Common.Interfaces;
 using EndAuth.Domain.Entities;
 using LanguageExt;
 using Microsoft.AspNetCore.Http;
@@ -37,18 +38,84 @@ public class JwtService<TUser> : IJwtService<TUser> where TUser : IdentityUser
 
     public async Task<string> CreateTokenAsync(string email)
     {
-        var signingCredentials = GetSigningCredentials();
-        var claims = await GetClaims(email);
-        var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
+        SigningCredentials signingCredentials = GetSigningCredentials();
+        List<Claim> claims = await GetClaims(email);
+        JwtSecurityToken tokenOptions = GenerateTokenOptions(signingCredentials, claims);
         return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+    }
+    public async Task<RefreshToken> CreateRefreshTokenAsync(string email, CancellationToken cancellationToken)
+    {
+        TUser user = await _userManager.FindByEmailAsync(email);
+        string newRefreshTokenId = Guid.NewGuid().ToString();
+        RefreshToken token = new()
+        {
+            CreationDate = DateTime.Now,
+            Expires = DateTime.Now.AddMinutes(5),
+            ApplicationUserId = user.Id,
+            Invalidated = false,
+            Used = false,
+            Token = newRefreshTokenId
+        };
+        _db.RefreshTokens.Add(token);
+        await _db.SaveChangesAsync(cancellationToken);
+        return token;
+    }
+
+    public async Task<(string, RefreshToken)> RefreshTokensAsync(string jwt, string refreshToken, CancellationToken cancellationToken)
+    {
+        //First of all, lets validate JWT
+
+        JwtSecurityTokenHandler tokenHandler = new();
+        ClaimsPrincipal? principal = null;
+        //bool isJwtExpired = false;
+        SecurityToken? securityToken;
+        try
+        {
+            _tokenValidationParameters.ValidateLifetime = false;
+            principal = tokenHandler.ValidateToken(jwt, _tokenValidationParameters, out securityToken);
+            _tokenValidationParameters.ValidateLifetime = true;
+        }
+        catch (SecurityTokenExpiredException)
+        {
+            //Our jwt is expired
+            throw new SecurityTokenException("Please log in again!!");
+        }
+        if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256Signature, StringComparison.InvariantCultureIgnoreCase))
+        {
+            throw new SecurityTokenException("Invalid token!");
+        }
+        string? userId = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userId))
+        {
+            throw new SecurityTokenException($"Missing claim: {ClaimTypes.Name}!");
+        }
+
+        var user = await _userManager.FindByIdAsync(userId);
+        //var jwtExpirationDate = new DateTime(1970, 1, 1, 0, 0, 0)
+        //    .AddTicks(long.Parse(principal.Claims.Single(m => m.Type == JwtRegisteredClaimNames.Exp)!.Value));
+
+        var refreshTokenFromDb = await _db.RefreshTokens.SingleOrDefaultAsync(m => m.Token.Equals(refreshToken), cancellationToken)
+            ?? throw new InvalidRefreshTokenException(refreshToken);
+        if (refreshTokenFromDb.Expires < DateTime.Now || refreshTokenFromDb.Invalidated)
+        {
+            //Refresh token has expired, or has already been used, so user have to login again.
+            throw new Exception("Please log in again");
+        }
+
+        //At this point both Refresh token is valid, and token is valid, so we can refresh both
+
+        var newJwt = await CreateTokenAsync(user.Email);
+        var newRefresh = await CreateRefreshTokenAsync(user.Email, cancellationToken);
+
+        return (newJwt, newRefresh);
     }
 
     private SigningCredentials GetSigningCredentials()
     {
         var jwtConfig = _configuration.GetSection("JwtSettings");
-        var key = Encoding.UTF8.GetBytes(jwtConfig["Key"]);
+        var key = Encoding.ASCII.GetBytes(jwtConfig["Key"]);
         var secret = new SymmetricSecurityKey(key);
-        return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
+        return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256Signature);
     }
 
     private async Task<List<Claim>> GetClaims(string email)
@@ -90,70 +157,5 @@ public class JwtService<TUser> : IJwtService<TUser> where TUser : IdentityUser
         signingCredentials: signingCredentials
         );
         return tokenOptions;
-    }
-
-
-    public async Task<RefreshToken> CreateRefreshTokenAsync(string email)
-    {
-        TUser user = await _userManager.FindByEmailAsync(email);
-        string newRefreshTokenId = Guid.NewGuid().ToString();
-        RefreshToken token = new()
-        {
-            CreationDate = DateTime.Now,
-            Expires = DateTime.Now.AddMinutes(5),
-            ApplicationUserId = user.Id,
-            Invalidated = false,
-            Used = false,
-            Token = newRefreshTokenId
-        };
-        _db.RefreshTokens.Add(token);
-        await _db.SaveChangesAsync();
-        return token;
-    }
-
-    public async Task<(string, RefreshToken)> RefreshTokensAsync(string jwt, string refreshToken)
-    {
-        var refreshTokenFromDb = await _db.RefreshTokens.SingleAsync(m => m.Token.Equals(refreshToken));
-        if(refreshTokenFromDb.Expires < DateTime.Now || refreshTokenFromDb.Invalidated)
-        {
-            //Refresh token has expired, user have to login again.
-            refreshTokenFromDb.Invalidated = true;
-            await _db.SaveChangesAsync();
-            throw new Exception("Please log in again");
-        }
-        //Refresh token is still valid, we can validate jwt.
-
-        JwtSecurityTokenHandler tokenHandler = new();
-        ClaimsPrincipal? principal = null;
-        SecurityToken? securityToken;
-        try
-        {
-             principal = tokenHandler.ValidateToken(jwt, _tokenValidationParameters, out securityToken);
-
-        }
-        catch(SecurityTokenExpiredException ex)
-        {
-            throw new SecurityTokenException("Please log in again!!");
-        }
-        if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-        {
-            throw new SecurityTokenException("Invalid token!");
-        }
-        string? userId = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userId))
-        {
-            throw new SecurityTokenException($"Missing claim: {ClaimTypes.Name}!");
-        }
-
-        var user = await _userManager.FindByIdAsync(userId);
-        //var jwtExpirationDate = new DateTime(1970, 1, 1, 0, 0, 0)
-        //    .AddTicks(long.Parse(principal.Claims.Single(m => m.Type == JwtRegisteredClaimNames.Exp)!.Value));
-
-        //At this point both Refresh token is valid, and token is valid, so we can refresh both
-
-        var newJwt = await CreateTokenAsync(user.Email);
-        var newRefresh = await CreateRefreshTokenAsync(user.Email);
-
-        return (newJwt, newRefresh);
     }
 }

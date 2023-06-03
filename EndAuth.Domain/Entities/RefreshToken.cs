@@ -1,12 +1,7 @@
-﻿using EndAuth.Domain;
-using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
-
-namespace EndAuth.Domain.Entities;
+﻿namespace EndAuth.Domain.Entities;
 
 public class RefreshToken
 {
-    [Key]
     public string Token { get; set; } = "";
     public string JwtId { get; set; } = "";
     public DateTime CreationDate { get; set; }

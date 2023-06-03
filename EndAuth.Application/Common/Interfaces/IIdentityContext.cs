@@ -7,5 +7,5 @@ public interface IIdentityContext
 {
     DbSet<ApplicationUser> ApplicationUsers { get; }
     DbSet<RefreshToken> RefreshTokens { get; }
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
