@@ -29,9 +29,8 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result<
         SignInResult loginAttemptResults = await _signInManager.PasswordSignInAsync(userFromDb, request.Password, false, false);
         if (loginAttemptResults.Succeeded)
         {
-            string accessToken = await _jwtService.CreateTokenAsync(request.Email);
-            RefreshToken refreshToken = await _jwtService.CreateRefreshTokenAsync(request.Email, cancellationToken);
-            AuthSuccessResponse response = new(accessToken, refreshToken.Token);
+            (string jwt, RefreshToken refreshToken) = await _jwtService.CreateTokensAsync(request.Email, cancellationToken);
+            AuthSuccessResponse response = new(jwt, refreshToken.Token);
             return response;
         }
         return new Result<AuthSuccessResponse>(new InvalidCredentialsException(request.Email));

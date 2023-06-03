@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EndAuth.JwtProvider.TokenParameterFactory;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -12,15 +13,20 @@ public class AccessTokenService<TUser> : IAccessTokenService<TUser> where TUser 
     private readonly UserManager<TUser> _userManager;
     private readonly IConfiguration _configuration;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ITokenParametersFactory _tokenParametersFactory;
+    private readonly TokenValidationParameters _tokenValidationParameters;
 
     public AccessTokenService(
         UserManager<TUser> userManager,
         IConfiguration configuration,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        ITokenParametersFactory tokenParametersFactory)
     {
         _userManager = userManager;
         _configuration = configuration;
         _httpContextAccessor = httpContextAccessor;
+        _tokenParametersFactory = tokenParametersFactory;
+        _tokenValidationParameters = _tokenParametersFactory.Create();
     }
 
     public SigningCredentials GetSigningCredentials()
@@ -70,5 +76,35 @@ public class AccessTokenService<TUser> : IAccessTokenService<TUser> where TUser 
             signingCredentials: signingCredentials
         );
         return tokenOptions;
+    }
+
+    public string ValidateJwt(string jwt, out ClaimsPrincipal claimsPrincipal)
+    {
+        //First of all, lets validate JWT
+
+        JwtSecurityTokenHandler tokenHandler = new();
+        SecurityToken? securityToken;
+        try
+        {
+            _tokenValidationParameters.ValidateLifetime = false;
+            claimsPrincipal = tokenHandler.ValidateToken(jwt, _tokenValidationParameters, out securityToken);
+        }
+        finally
+        {
+            _tokenValidationParameters.ValidateLifetime = true;
+        }
+
+
+        if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256Signature, StringComparison.InvariantCultureIgnoreCase))
+        {
+            throw new SecurityTokenException("JWT is invalid");
+        }
+
+        string? userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userId))
+        {
+            throw new SecurityTokenException($"Missing claim: {ClaimTypes.Name}!");
+        }
+        return userId;
     }
 }

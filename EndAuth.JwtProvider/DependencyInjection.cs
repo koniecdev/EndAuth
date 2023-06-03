@@ -15,6 +15,7 @@ public static class DependencyInjection
         services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.TryAddScoped<ITokenParametersFactory, TokenParametersFactory>();
         services.TryAddScoped(typeof(IAccessTokenService<>), typeof(AccessTokenService<>));
+        services.TryAddScoped(typeof(IRefreshTokenService<>), typeof(RefreshTokenService<>));
         services.TryAddScoped(typeof(ITokensService<>), typeof(TokensService<>));
         return services;
     }
