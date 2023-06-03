@@ -1,10 +1,8 @@
-using EndAuth.Application.Common.Exceptions;
 using EndAuth.Application.Identities.Commands.Register;
 using EndAuth.Domain.Entities;
 using EndAuth.Shared.Identities.Commands.Register;
 using FluentAssertions;
 using FluentValidation;
-using LanguageExt.Common;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using UnitTests.Application.Common;

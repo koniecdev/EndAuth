@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using EndAuth.Shared.Identities.Commands.Refresh;
 using EndAuth.Shared.Identities.Commands.Login;
 using EndAuth.Application.Extensions;
-using System.Security.Authentication;
 using EndAuth.Application.Common.Exceptions;
 using Microsoft.AspNetCore.Cors;
 

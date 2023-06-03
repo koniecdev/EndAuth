@@ -1,11 +1,6 @@
-using Castle.Core.Configuration;
-using EndAuth.Application.Identities.Commands.Login;
 using EndAuth.Domain.Entities;
-using EndAuth.JwtProvider;
 using EndAuth.JwtProvider.Services;
-using EndAuth.Shared.Identities.Commands.Login;
 using FluentAssertions;
-using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +11,7 @@ using UnitTests.Application.Common;
 namespace UnitTests.Application.Tests;
 public class JwtCreationTests : CommandTestBase
 {
-    private readonly JwtService<ApplicationUser> _service;
+    private readonly TokensService<ApplicationUser> _service;
     public JwtCreationTests()
     {
         var inMemorySettings = new Dictionary<string, string> {

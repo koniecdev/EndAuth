@@ -2,7 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace EndAuth.JwtProvider;
+namespace EndAuth.JwtProvider.TokenParameterFactory;
 
 public class TokenParametersFactory : ITokenParametersFactory
 {

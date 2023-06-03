@@ -1,5 +1,4 @@
-﻿using EndAuth.Shared.Identities.Commands.Login;
-using EndAuth.Shared.Identities.Commands.Refresh;
+﻿using EndAuth.Shared.Identities.Commands.Refresh;
 using FluentValidation;
 
 namespace EndAuth.Application.Identities.Commands.Login;

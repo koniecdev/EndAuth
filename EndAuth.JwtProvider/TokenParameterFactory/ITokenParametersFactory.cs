@@ -1,6 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 
-namespace EndAuth.JwtProvider
+namespace EndAuth.JwtProvider.TokenParameterFactory
 {
     public interface ITokenParametersFactory
     {

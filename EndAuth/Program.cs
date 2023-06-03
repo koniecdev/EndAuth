@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Text;
 using EndAuth.Persistance;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using EndAuth.Shared;
 using EndAuth.JwtProvider;
-using Microsoft.Extensions.DependencyInjection;
+using EndAuth.JwtProvider.TokenParameterFactory;
 
 var builder = WebApplication.CreateBuilder(args);
 

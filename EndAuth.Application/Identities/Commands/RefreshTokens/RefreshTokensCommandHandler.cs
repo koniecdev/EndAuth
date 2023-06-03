@@ -6,9 +6,9 @@ using EndAuth.Shared.Identities.Commands.Refresh;
 namespace EndAuth.Application.Identities.Commands.Login;
 public class RefreshTokensCommandHandler : IRequestHandler<RefreshTokensCommand, Result<AuthSuccessResponse>>
 {
-    private readonly IJwtService<ApplicationUser> _jwtService;
+    private readonly ITokensService<ApplicationUser> _jwtService;
 
-    public RefreshTokensCommandHandler(IJwtService<ApplicationUser> jwtService)
+    public RefreshTokensCommandHandler(ITokensService<ApplicationUser> jwtService)
     {
         _jwtService = jwtService;
     }

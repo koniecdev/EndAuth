@@ -2,7 +2,7 @@
 
 namespace EndAuth.Application.Common.Interfaces;
 
-public interface IJwtService<TUser>
+public interface ITokensService<TUser>
 {
     Task<string> CreateTokenAsync(string email);
     Task<RefreshToken> CreateRefreshTokenAsync(string email, CancellationToken cancellationToken);

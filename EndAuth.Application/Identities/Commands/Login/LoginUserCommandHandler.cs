@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Identity;
 namespace EndAuth.Application.Identities.Commands.Login;
 public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result<AuthSuccessResponse>>
 {
-    private readonly IJwtService<ApplicationUser> _jwtService;
+    private readonly ITokensService<ApplicationUser> _jwtService;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public LoginUserCommandHandler(IJwtService<ApplicationUser> jwtService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+    public LoginUserCommandHandler(ITokensService<ApplicationUser> jwtService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
     {
         _jwtService = jwtService;
         _userManager = userManager;

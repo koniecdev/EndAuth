@@ -1,6 +1,5 @@
 ﻿using EndAuth.Application.Common.Interfaces;
 using EndAuth.Domain.Entities;
-using EndAuth.Persistance.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
