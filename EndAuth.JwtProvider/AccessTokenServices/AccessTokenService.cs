@@ -1,4 +1,5 @@
-﻿using EndAuth.JwtProvider.TokenParameterFactory;
+﻿using EndAuth.Application.Common.Interfaces;
+using EndAuth.JwtProvider.TokenParameterFactory;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -14,18 +15,21 @@ public class AccessTokenService<TUser> : IAccessTokenService<TUser> where TUser 
     private readonly IConfiguration _configuration;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ITokenParametersFactory _tokenParametersFactory;
+    private readonly IDateTimeService _dateTimeService;
     private readonly TokenValidationParameters _tokenValidationParameters;
 
     public AccessTokenService(
         UserManager<TUser> userManager,
         IConfiguration configuration,
         IHttpContextAccessor httpContextAccessor,
-        ITokenParametersFactory tokenParametersFactory)
+        ITokenParametersFactory tokenParametersFactory,
+        IDateTimeService dateTimeService)
     {
         _userManager = userManager;
         _configuration = configuration;
         _httpContextAccessor = httpContextAccessor;
         _tokenParametersFactory = tokenParametersFactory;
+        _dateTimeService = dateTimeService;
         _tokenValidationParameters = _tokenParametersFactory.Create();
     }
 
@@ -72,7 +76,7 @@ public class AccessTokenService<TUser> : IAccessTokenService<TUser> where TUser 
             issuer: jwtSettings["Issuer"],
             audience: jwtSettings["Audience"],
             claims: claims,
-            expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["ExpiresIn"])),
+            expires: _dateTimeService.Now.AddMinutes(Convert.ToDouble(jwtSettings["ExpiresIn"])),
             signingCredentials: signingCredentials
         );
         return tokenOptions;
@@ -80,8 +84,6 @@ public class AccessTokenService<TUser> : IAccessTokenService<TUser> where TUser 
 
     public string ValidateJwt(string jwt, out ClaimsPrincipal claimsPrincipal)
     {
-        //First of all, lets validate JWT
-
         JwtSecurityTokenHandler tokenHandler = new();
         SecurityToken? securityToken;
         try
