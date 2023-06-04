@@ -4,6 +4,7 @@ using EndAuth.Persistance.Contexts.IdentityDb;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EndAuth.Persistance.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20230604154852_AddDefaultAdminWithSuperAdminRoleToDb")]
+    partial class AddDefaultAdminWithSuperAdminRoleToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,8 +85,8 @@ namespace EndAuth.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "9a7ccc32-d4e6-4c61-8b66-a841e3cc1f77",
-                            ConcurrencyStamp = "9a7ccc32-d4e6-4c61-8b66-a841e3cc1f77",
+                            Id = "af39643c-25f5-4430-89b1-3d53548aac53",
+                            ConcurrencyStamp = "af39643c-25f5-4430-89b1-3d53548aac53",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         });
@@ -250,8 +252,8 @@ namespace EndAuth.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "4bb0cdc6-2113-4efa-8dd0-2fbd2ced42fb",
-                            RoleId = "9a7ccc32-d4e6-4c61-8b66-a841e3cc1f77"
+                            UserId = "07e3137a-1bf3-4724-9c68-efd6d6cf867a",
+                            RoleId = "af39643c-25f5-4430-89b1-3d53548aac53"
                         });
                 });
 
@@ -283,17 +285,16 @@ namespace EndAuth.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4bb0cdc6-2113-4efa-8dd0-2fbd2ced42fb",
+                            Id = "07e3137a-1bf3-4724-9c68-efd6d6cf867a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "31286c80-7173-43cd-8760-b08cb697a52d",
+                            ConcurrencyStamp = "f3efbb78-83b4-4327-9ee8-f7a3134cabef",
                             Email = "DefaultAdmin@default.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
-                            NormalizedEmail = "DEFAULTADMIN@DEFAULT.COM",
                             NormalizedUserName = "DEFAULTADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHPdLbFVuCzflHAYX8l6cHglhfBr/55hBHnBABRENL/YP4lnEOftBl+SmFZqdSW8+g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENeY0lTh6TWPHXpdc1+abfqZeyPzR7+j8pd+uQx/LFGvtXOETIEnWTdgml4VpMm+UA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "3402184d-2a88-4ec6-a801-8227471613ba",
+                            SecurityStamp = "f29ee80d-08a5-43e6-9656-e791c3b4404b",
                             TwoFactorEnabled = false,
                             UserName = "DefaultAdmin"
                         });

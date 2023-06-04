@@ -20,10 +20,11 @@ public class TokenParametersFactory : ITokenParametersFactory
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["JwtSettings:Key"]!)),
             ValidateIssuer = true,
-            ValidateAudience = true,
+            ValidateAudience = false,
             ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero,
             ValidIssuer = _configuration["JwtSettings:Issuer"],
-            ValidAudience = _configuration["JwtSettings:Audience"],
+            //ValidAudience = _configuration["JwtSettings:Audience"],
         };
     }
 }
