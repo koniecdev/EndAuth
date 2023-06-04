@@ -1,3 +1,4 @@
+using EndAuth.Application.Common.Exceptions;
 using EndAuth.Application.Identities.Commands.Register;
 using EndAuth.Domain.Entities;
 using EndAuth.Shared.Identities.Commands.Register;
@@ -31,8 +32,8 @@ public class RegisterUserCommandHandlerTest : CommandTestBase
     {
         RegisterUserCommand command = new("Default@xd.pl", "Default1", "Default123");
         ValidateRequest(command);
-        var result = await _handler.Handle(command, CancellationToken.None);
-        result.IsSuccess.Should().BeTrue();
+        Exception ex = await Record.ExceptionAsync(() => _handler.Handle(command, CancellationToken.None));
+        ex.Should().BeNull();
     }
 
     [Theory]
@@ -43,24 +44,22 @@ public class RegisterUserCommandHandlerTest : CommandTestBase
     {
         RegisterUserCommand command = new("Default@xd.pl", "Default1", pass);
         ValidateRequest(command);
-        var result = await _handler.Handle(command, CancellationToken.None);
-        result.IsSuccess.Should().BeTrue();
+        Exception ex = await Record.ExceptionAsync(() => _handler.Handle(command, CancellationToken.None));
+        ex.Should().BeNull();
     }
 
-    [Fact]
-    public Task Register_InvalidEmail_ShouldBeInvalid()
+    [Theory]
+    [InlineData("Default@")]
+    [InlineData("Default@.com")]
+    [InlineData("Default@x.")]
+    [InlineData("@x.")]
+    [InlineData("@x.pl")]
+    public Task Register_InvalidEmail_ShouldBeInvalid(string email)
     {
-        RegisterUserCommand command = new("Default@", "Default", "Default123$");
-        try
-        {
-            ValidateRequest(command);
-            throw new Exception();
-        }
-        catch (Exception ex)
-        {
-            ex.Should().BeOfType<ValidationException>();
-            return Task.CompletedTask;
-        }
+        RegisterUserCommand command = new(email, "Default", "Default123$");
+        Exception ex = Record.Exception(() => ValidateRequest(command));
+        ex.Should().BeOfType<ValidationException>();
+        return Task.CompletedTask;
     }
 
     [Theory]
@@ -70,8 +69,8 @@ public class RegisterUserCommandHandlerTest : CommandTestBase
     {
         RegisterUserCommand command = new(email, username, "Default123$");
         ValidateRequest(command);
-        var result = await _handler.Handle(command, CancellationToken.None);
-        result.IsSuccess.Should().BeFalse();
+        Exception ex = await Record.ExceptionAsync(() => _handler.Handle(command, CancellationToken.None));
+        ex.Should().BeOfType<ResourceAlreadyExistsException>();
     }
 
     [Theory]
@@ -82,16 +81,9 @@ public class RegisterUserCommandHandlerTest : CommandTestBase
     public Task Register_InvalidPassword_ShouldBeInvalid(string pass)
     {
         RegisterUserCommand command = new("Default1@koniec.dev", "Default1", pass);
-        try
-        {
-            ValidateRequest(command);
-            throw new Exception();
-        }
-        catch (Exception ex)
-        {
-            ex.Should().BeOfType<ValidationException>();
-            return Task.CompletedTask;
-        }
+        Exception ex = Record.Exception(() => ValidateRequest(command));
+        ex.Should().BeOfType<ValidationException>();
+        return Task.CompletedTask;
     }
 
 
