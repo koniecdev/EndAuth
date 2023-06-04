@@ -42,10 +42,17 @@ public class LoginUserCommandHandlerTest : CommandTestBase
                 It.IsAny<bool>()))
         .ReturnsAsync(SignInResult.Success))
         .Build();
-        //var jwtServiceMock = new Mock<ITokensService<ApplicationUser>>();
-        //jwtServiceMock.Setup(m => m.CreateTokensAsync("Default@example.com", CancellationToken.None)).ReturnsAsync(new ("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRGVmYXVsdCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6IkRlZmF1bHRAZXhhbXBsZS5jb20iLCJleHAiOjE2ODU2OTE1MDgsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcyMDciLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MTcxIn0.mVGcL8gpdg_w_yO3Prcl6f2LqQ8JpeWIddZoRa-azlY", Guid.NewGuid().ToString()));
+        var jwtServiceMock = new Mock<ITokensService<ApplicationUser>>();
+        //jwtServiceMock.Setup(m => m.CreateTokensAsync("Default@example.com", CancellationToken.None)).ReturnsAsync(new (, Guid.NewGuid().ToString()));
         //_handler = new(new TokensService<ApplicationUser>(fakeUserManager.Object), fakeUserManager.Object, fakeSignInManager.Object);
-        //_validator = new();
+        string fakeJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRGVmYXVsdCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6IkRlZmF1bHRAZXhhbXBsZS5jb20iLCJleHAiOjE2ODU2OTE1MDgsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcyMDciLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MTcxIn0.mVGcL8gpdg_w_yO3Prcl6f2LqQ8JpeWIddZoRa-azlY";
+        RefreshToken fakeRefresh = new()
+        {
+            Token = "FakeToken"
+        };
+        jwtServiceMock.Setup(m => m.CreateTokensAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(value: (fakeJwt, fakeRefresh));
+        _handler = new(jwtServiceMock.Object, fakeUserManager.Object, fakeSignInManager.Object);
+        _validator = new();
     }
 
     [Fact]
