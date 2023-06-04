@@ -1,12 +1,13 @@
 ﻿using EndAuth.Shared.Identities.Commands.Login;
 using FluentValidation;
+using System.ComponentModel.DataAnnotations;
 
 namespace EndAuth.Application.Identities.Commands.Login;
 public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
 {
     public LoginUserCommandValidator()
     {
-        RuleFor(m => m.Email).EmailAddress();
+        RuleFor(m => m.Email).NotEmpty().EmailAddress().Matches(@"^[\w\.-]+@[\w\.-]+\.\w+$").WithMessage("Invalid email address.");
         RuleFor(m => m.Password).NotEmpty();
     }
 }

@@ -11,13 +11,16 @@ public class RefreshTokenService<TUser> : IRefreshTokenService<TUser> where TUse
 {
     private readonly UserManager<TUser> _userManager;
     private readonly IIdentityContext _db;
+    private readonly IDateTimeService _dateTimeService;
 
     public RefreshTokenService(
         UserManager<TUser> userManager,
-        IIdentityContext context)
+        IIdentityContext context,
+        IDateTimeService dateTimeService)
     {
         _userManager = userManager;
         _db = context;
+        _dateTimeService = dateTimeService;
     }
     public async Task<RefreshToken> CreateRefreshTokenAsync(string email, string jwtId, CancellationToken cancellationToken)
     {
@@ -25,8 +28,8 @@ public class RefreshTokenService<TUser> : IRefreshTokenService<TUser> where TUse
         string newRefreshTokenId = Guid.NewGuid().ToString();
         RefreshToken token = new()
         {
-            CreationDate = DateTime.Now,
-            Expires = DateTime.Now.AddMinutes(5),
+            CreationDate = _dateTimeService.Now,
+            Expires = _dateTimeService.Now.AddMinutes(5),
             ApplicationUserId = user.Id,
             Invalidated = false,
             Used = false,
@@ -45,7 +48,7 @@ public class RefreshTokenService<TUser> : IRefreshTokenService<TUser> where TUse
             throw new NotMatchingTokensException(jwt, refreshToken.Token);
         }
 
-        if (refreshToken.Expires < DateTime.Now || refreshToken.Invalidated || refreshToken.Used)
+        if (refreshToken.Expires < _dateTimeService.Now || refreshToken.Invalidated || refreshToken.Used)
         {
             //Refresh token has expired, or has already been used, so user have to login again.
             throw new SecurityTokenExpiredException("Please log in again");

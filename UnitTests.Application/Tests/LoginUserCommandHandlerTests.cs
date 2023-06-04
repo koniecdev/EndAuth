@@ -1,3 +1,4 @@
+using EndAuth.Application.Common.Exceptions;
 using EndAuth.Application.Common.Interfaces;
 using EndAuth.Application.Identities.Commands.Login;
 using EndAuth.Domain.Entities;
@@ -43,8 +44,6 @@ public class LoginUserCommandHandlerTest : CommandTestBase
         .ReturnsAsync(SignInResult.Success))
         .Build();
         var jwtServiceMock = new Mock<ITokensService<ApplicationUser>>();
-        //jwtServiceMock.Setup(m => m.CreateTokensAsync("Default@example.com", CancellationToken.None)).ReturnsAsync(new (, Guid.NewGuid().ToString()));
-        //_handler = new(new TokensService<ApplicationUser>(fakeUserManager.Object), fakeUserManager.Object, fakeSignInManager.Object);
         string fakeJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRGVmYXVsdCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6IkRlZmF1bHRAZXhhbXBsZS5jb20iLCJleHAiOjE2ODU2OTE1MDgsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcyMDciLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MTcxIn0.mVGcL8gpdg_w_yO3Prcl6f2LqQ8JpeWIddZoRa-azlY";
         RefreshToken fakeRefresh = new()
         {
@@ -61,7 +60,8 @@ public class LoginUserCommandHandlerTest : CommandTestBase
         LoginUserCommand command = new("Default@example.com", "Default123$");
         ValidateRequest(command);
         var result = await _handler.Handle(command, CancellationToken.None);
-        result.IsSuccess.Should().BeTrue();
+        result.AccessToken.Length.Should().BeGreaterThan(1);
+        result.RefreshToken.Length.Should().BeGreaterThan(1);
     }
 
     [Fact]
@@ -69,8 +69,8 @@ public class LoginUserCommandHandlerTest : CommandTestBase
     {
         LoginUserCommand command = new("Default@example.com", "wffqwfqwfwqfqf");
         ValidateRequest(command);
-        var result = await _handler.Handle(command, CancellationToken.None);
-        result.IsSuccess.Should().BeFalse();
+        Exception ex = await Record.ExceptionAsync(() => _handler.Handle(command, CancellationToken.None));
+        ex.Should().BeOfType<InvalidCredentialsException>();
     }
 
     [Fact]
@@ -78,17 +78,22 @@ public class LoginUserCommandHandlerTest : CommandTestBase
     {
         LoginUserCommand command = new("qwfwqf@koniec.dev", "wffqwfqwfwqfqf");
         ValidateRequest(command);
-        var result = await _handler.Handle(command, CancellationToken.None);
-        result.IsSuccess.Should().BeFalse();
+        Exception ex = await Record.ExceptionAsync(() => _handler.Handle(command, CancellationToken.None));
+        ex.Should().BeOfType<ResourceNotFoundException>();
     }
 
-    [Fact]
-    public async Task Login_InvalidEmail_ShouldBeValidationError()
+    [Theory]
+    [InlineData("Default@")]
+    [InlineData("Default@.com")]
+    [InlineData("Default@x.")]
+    [InlineData("@x.")]
+    [InlineData("@x.pl")]
+    public Task Login_InvalidEmail_ShouldBeValidationError(string email)
     {
-        LoginUserCommand command = new("qwfwqf@koniec.dev", "wffqwfqwfwqfqf");
-        ValidateRequest(command);
-        var result = await _handler.Handle(command, CancellationToken.None);
-        result.IsSuccess.Should().BeFalse();
+        LoginUserCommand command = new(email, "wffqwfqwfwqfqf");
+        Exception ex = Record.Exception(() => ValidateRequest(command));
+        ex.Should().BeOfType<ValidationException>();
+        return Task.CompletedTask;
     }
 
     private void ValidateRequest(LoginUserCommand command)

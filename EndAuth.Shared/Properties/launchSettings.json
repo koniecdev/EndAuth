@@ -1,12 +1,12 @@
 {
   "profiles": {
-    "EndAuth.JwtProvider": {
+    "EndAuth.Shared": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:51587;http://localhost:51588"
+      "applicationUrl": "https://localhost:57871;http://localhost:57872"
     }
   }
 }

@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EndAuth.Infrastructure\EndAuth.Infrastructure.csproj" />
     <ProjectReference Include="..\EndAuth.Persistance\EndAuth.Persistance.csproj" />
   </ItemGroup>
 

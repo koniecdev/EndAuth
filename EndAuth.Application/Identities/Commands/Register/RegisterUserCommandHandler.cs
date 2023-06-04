@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace EndAuth.Application.Identities.Commands.Register;
 
-public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, Result<string>>
+public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand>
 {
     private readonly UserManager<ApplicationUser> _userManager;
 
@@ -14,7 +14,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
         _userManager = userManager;
     }
 
-    public async Task<Result<string>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+    public async Task Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
         ApplicationUser applicationUser = new()
         {
@@ -24,9 +24,12 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
         if (await _userManager.FindByNameAsync(applicationUser.UserName) is not null
             || await _userManager.FindByEmailAsync(applicationUser.Email) is not null)
         {
-            return new(new ResourceAlreadyExistsException(nameof(ApplicationUser), applicationUser.UserName));
+            throw new ResourceAlreadyExistsException(nameof(ApplicationUser), applicationUser.UserName);
         }
         IdentityResult result = await _userManager.CreateAsync(applicationUser, request.Password);
-        return result.Succeeded ? applicationUser.Id : new Result<string>(new IdentityResultFailedException(result.Errors));
+        if (!result.Succeeded)
+        {
+            throw new IdentityResultFailedException(result.Errors);
+        }
     }
 }

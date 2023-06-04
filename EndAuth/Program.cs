@@ -6,7 +6,7 @@ using EndAuth.Shared;
 using EndAuth.JwtProvider;
 using EndAuth.JwtProvider.TokenParameterFactory;
 using Serilog;
-
+using EndAuth.Infrastructure.Extensions;
 
 var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
@@ -72,9 +72,12 @@ try
 
     builder.Services.AddJwtProvider();
     builder.Services.AddApplication();
+    builder.Services.AddInfrastructure();
     builder.Services.AddPersistance(builder.Configuration);
 
     var app = builder.Build();
+
+    app.UseExceptionsHandling();
 
     if (app.Environment.IsDevelopment())
     {
