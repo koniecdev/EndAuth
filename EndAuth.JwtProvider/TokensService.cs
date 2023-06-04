@@ -2,7 +2,6 @@
 using EndAuth.Application.Common.Interfaces;
 using EndAuth.Domain.Entities;
 using EndAuth.JwtProvider.AccessTokenServices;
-using EndAuth.JwtProvider.TokenParameterFactory;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

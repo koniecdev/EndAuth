@@ -24,7 +24,7 @@ public class TokenParametersFactory : ITokenParametersFactory
             ValidateLifetime = true,
             ClockSkew = TimeSpan.Zero,
             ValidIssuer = _configuration["JwtSettings:Issuer"],
-            //ValidAudience = _configuration["JwtSettings:Audience"],
+            ValidAudience = _configuration["JwtSettings:Audience"],
         };
     }
 }

@@ -2,7 +2,6 @@ using EndAuth.Application.Common.Exceptions;
 using EndAuth.Application.Common.Interfaces;
 using EndAuth.Application.Identities.Commands.Login;
 using EndAuth.Domain.Entities;
-using EndAuth.JwtProvider.Services;
 using EndAuth.Shared.Identities.Commands.Login;
 using FluentAssertions;
 using FluentValidation;

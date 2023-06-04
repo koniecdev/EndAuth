@@ -1,10 +1,7 @@
 ﻿using EndAuth.Shared.Dtos;
 using EndAuth.Shared.Identities.Commands.Login;
-using EndAuthSimpleClient.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace EndAuthSimpleClient.Controllers;
@@ -25,7 +22,11 @@ public class AuthController : Controller
 
             // Store the tokens or use them for subsequent API calls
             // Here, we're storing the access token in a secure cookie named "jwt_token"
-            Response.Cookies.Append("jwt_token", authSuccessResponse?.AccessToken!);
+            if(authSuccessResponse is not null)
+            {
+                Response.Cookies.Append("jwt_token", authSuccessResponse.AccessToken, new() { HttpOnly = true });
+                Response.Cookies.Append("refresh_token", authSuccessResponse.RefreshToken, new() { HttpOnly = true});
+            }
 
             return RedirectToAction("Index", "Home");
         }

@@ -1,4 +1,4 @@
-﻿namespace EndAuthSimpleClient.Controllers;
+﻿namespace EndAuthSimpleClient.Models;
 
 public class WeatherForecast
 {

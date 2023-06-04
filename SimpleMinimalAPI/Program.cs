@@ -20,21 +20,19 @@ builder.Services.AddCors(options =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        //options.Authority = "https://localhost:7207"; // Authentication server URL
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateAudience = false, // Optional: Customize audience validation if needed
+            ValidateAudience = true,
             ValidateIssuer = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             ClockSkew = TimeSpan.Zero,
-            ValidIssuer = "https://localhost:7207", // Specify the valid issuer for your authentication server
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("ForTheLoveOfGodStoreAndLoadThisSecurely")) // Specify the signing key used by the authentication server
+            ValidAudience = "EndAuth",
+            ValidIssuer = "https://localhost:7207",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("ForTheLoveOfGodStoreAndLoadThisSecurely"))
         };
     });
 
-
-// Configure authorization policies
 builder.Services.AddAuthorization();
 
 var app = builder.Build();

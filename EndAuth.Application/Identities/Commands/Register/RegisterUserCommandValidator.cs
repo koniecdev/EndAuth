@@ -1,6 +1,5 @@
 ﻿using EndAuth.Shared.Identities.Commands.Register;
 using FluentValidation;
-using System.ComponentModel.DataAnnotations;
 
 namespace EndAuth.Application.Identities.Commands.Register;
 
