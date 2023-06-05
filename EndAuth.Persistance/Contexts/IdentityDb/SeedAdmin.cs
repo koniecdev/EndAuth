@@ -8,7 +8,7 @@ public static class SeedAdmin
 {
     public static void Initialize(ModelBuilder builder)
     {
-        var superAdminRoleId = Guid.NewGuid().ToString();
+        var superAdminRoleId = "978e4744-ffe0-4b3a-bdcd-e805ecb64359";
         builder.Entity<IdentityRole>().HasData(new IdentityRole
         {
             Name = "SuperAdmin",
@@ -17,7 +17,7 @@ public static class SeedAdmin
             ConcurrencyStamp = superAdminRoleId
         });
 
-        var appUserId = Guid.NewGuid().ToString();
+        var appUserId = "1362245b-0494-47ea-abae-912890c0cb46";
         var appUser = new ApplicationUser
         {
             Id = appUserId,

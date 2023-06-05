@@ -43,7 +43,11 @@ public class LoginUserCommandHandlerTest : CommandTestBase
         .ReturnsAsync(SignInResult.Success))
         .Build();
         var jwtServiceMock = new Mock<ITokensService<ApplicationUser>>();
-        string fakeJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRGVmYXVsdCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6IkRlZmF1bHRAZXhhbXBsZS5jb20iLCJleHAiOjE2ODU2OTE1MDgsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcyMDciLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MTcxIn0.mVGcL8gpdg_w_yO3Prcl6f2LqQ8JpeWIddZoRa-azlY";
+        AccessToken fakeJwt = new()
+        {
+            Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiRGVmYXVsdCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6IkRlZmF1bHRAZXhhbXBsZS5jb20iLCJleHAiOjE2ODU2OTE1MDgsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcyMDciLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MTcxIn0.mVGcL8gpdg_w_yO3Prcl6f2LqQ8JpeWIddZoRa-azlY",
+            Expires = DateTimeOffset.Now
+        };
         RefreshToken fakeRefresh = new()
         {
             Token = "FakeToken"

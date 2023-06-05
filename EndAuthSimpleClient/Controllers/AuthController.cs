@@ -24,8 +24,14 @@ public class AuthController : Controller
             // Here, we're storing the access token in a secure cookie named "jwt_token"
             if(authSuccessResponse is not null)
             {
+                CookieOptions options = new()
+                {
+                    Expires = DateTimeOffset.Now
+                };
                 Response.Cookies.Append("jwt_token", authSuccessResponse.AccessToken, new() { HttpOnly = true });
+                Response.Cookies.Append("jwt_token_expires", authSuccessResponse.AccessTokenExpiration.ToString(), new() { HttpOnly = true });
                 Response.Cookies.Append("refresh_token", authSuccessResponse.RefreshToken, new() { HttpOnly = true});
+                Response.Cookies.Append("refresh_token_expires", authSuccessResponse.RefreshTokenExpiration.ToString(), new() { HttpOnly = true});
             }
 
             return RedirectToAction("Index", "Home");

@@ -14,7 +14,7 @@ public class RefreshTokensCommandHandler : IRequestHandler<RefreshTokensCommand,
     }
     public async Task<AuthSuccessResponse> Handle(RefreshTokensCommand request, CancellationToken cancellationToken)
     {
-        (string jwt, RefreshToken refreshToken) = await _jwtService.RefreshTokensAsync(request.AccessToken, request.RefreshToken, cancellationToken);
-        return new AuthSuccessResponse(jwt, refreshToken.Token);
+        (AccessToken accessToken, RefreshToken refreshToken) = await _jwtService.RefreshTokensAsync(request.AccessToken, request.RefreshToken, cancellationToken);
+        return new AuthSuccessResponse(accessToken.Token, accessToken.Expires, refreshToken.Token, refreshToken.Expires);
     }
 }

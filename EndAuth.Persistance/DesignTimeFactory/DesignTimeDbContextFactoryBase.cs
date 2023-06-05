@@ -24,7 +24,7 @@ public abstract class DesignTimeDbContextFactoryBase<TContext> :
         }
         while (++depth < 3 && dir?.Name != "src");
 
-        var appsettingsDir = dir?.GetFiles("appsettings.json", SearchOption.AllDirectories).First();
+        var appsettingsDir = dir?.GetFiles("..\\EndAuth\\appsettings.json", SearchOption.AllDirectories).First();
 
         var basePath = appsettingsDir?.Directory?.FullName;
 

@@ -29,8 +29,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ClockSkew = TimeSpan.Zero,
             ValidAudience = "EndAuth",
             ValidIssuer = "https://localhost:7207",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("ForTheLoveOfGodStoreAndLoadThisSecurely"))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("ForTheLoveOfGodStoreAndLoadThisSecurely")),
         };
+        options.MapInboundClaims = true;
     });
 
 builder.Services.AddAuthorization();

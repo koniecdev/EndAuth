@@ -28,17 +28,22 @@ public class TokensService<TUser> : ITokensService<TUser> where TUser : Identity
         _refreshTokenService = refreshTokenService;
     }
 
-    public async Task<(string, RefreshToken)> CreateTokensAsync(string email, CancellationToken cancellationToken)
+    public async Task<(AccessToken, RefreshToken)> CreateTokensAsync(string email, CancellationToken cancellationToken)
     {
         SigningCredentials signingCredentials = _accessTokenService.GetSigningCredentials();
         ICollection<Claim> claims = await _accessTokenService.GetClaimsAsync(email);
         JwtSecurityToken tokenOptions = _accessTokenService.GenerateTokenOptions(signingCredentials, claims);
         string newJwt = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+        AccessToken newAccessToken = new()
+        {
+            Token = newJwt,
+            Expires = tokenOptions.ValidTo
+        };
         RefreshToken newRefreshToken = await _refreshTokenService.CreateRefreshTokenAsync(email, claims.Single(m=>m.Type == JwtRegisteredClaimNames.Jti).Value, cancellationToken);
-        return (newJwt, newRefreshToken);
+        return (newAccessToken, newRefreshToken);
     }
 
-    public async Task<(string, RefreshToken)> RefreshTokensAsync(string jwt, string refreshToken, CancellationToken cancellationToken)
+    public async Task<(AccessToken, RefreshToken)> RefreshTokensAsync(string jwt, string refreshToken, CancellationToken cancellationToken)
     {
         string userId = _accessTokenService.ValidateJwt(jwt, out ClaimsPrincipal principal);
 

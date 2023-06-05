@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EndAuthSimpleClient.Attributes;
+using EndAuthSimpleClient.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 
 namespace EndAuthSimpleClient.Controllers;
 
 public class WeatherController : Controller
 {
-    //[Authorize]
+    [JwtAuthentication]
     [HttpGet]
     public async Task<IActionResult> GetWeatherForecast()
     {
