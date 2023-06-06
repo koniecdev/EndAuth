@@ -76,7 +76,7 @@ public class AccessTokenService<TUser> : IAccessTokenService<TUser> where TUser 
             issuer: jwtSettings["Issuer"],
             audience: jwtSettings["Audience"],
             claims: claims,
-            expires: _dateTimeService.Now.AddMinutes(Convert.ToDouble(jwtSettings["ExpiresIn"])),
+            expires: _dateTimeService.Now.AddMinutes(Convert.ToDouble(jwtSettings["ExpiresIn"])).DateTime,
             signingCredentials: signingCredentials
         );
         return tokenOptions;

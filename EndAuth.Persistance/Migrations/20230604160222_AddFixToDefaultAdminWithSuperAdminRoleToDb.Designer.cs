@@ -4,6 +4,7 @@ using EndAuth.Persistance.Contexts.IdentityDb;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EndAuth.Persistance.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20230604160222_AddFixToDefaultAdminWithSuperAdminRoleToDb")]
+    partial class AddFixToDefaultAdminWithSuperAdminRoleToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,11 +33,11 @@ namespace EndAuth.Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTimeOffset>("CreationDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTimeOffset>("Expires")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("Invalidated")
                         .HasColumnType("bit");
@@ -83,8 +85,8 @@ namespace EndAuth.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "978e4744-ffe0-4b3a-bdcd-e805ecb64359",
-                            ConcurrencyStamp = "978e4744-ffe0-4b3a-bdcd-e805ecb64359",
+                            Id = "9a7ccc32-d4e6-4c61-8b66-a841e3cc1f77",
+                            ConcurrencyStamp = "9a7ccc32-d4e6-4c61-8b66-a841e3cc1f77",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         });
@@ -250,8 +252,8 @@ namespace EndAuth.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "1362245b-0494-47ea-abae-912890c0cb46",
-                            RoleId = "978e4744-ffe0-4b3a-bdcd-e805ecb64359"
+                            UserId = "4bb0cdc6-2113-4efa-8dd0-2fbd2ced42fb",
+                            RoleId = "9a7ccc32-d4e6-4c61-8b66-a841e3cc1f77"
                         });
                 });
 
@@ -283,17 +285,17 @@ namespace EndAuth.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1362245b-0494-47ea-abae-912890c0cb46",
+                            Id = "4bb0cdc6-2113-4efa-8dd0-2fbd2ced42fb",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2dbde0f4-7034-45d4-be45-0931cad01460",
+                            ConcurrencyStamp = "31286c80-7173-43cd-8760-b08cb697a52d",
                             Email = "DefaultAdmin@default.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "DEFAULTADMIN@DEFAULT.COM",
                             NormalizedUserName = "DEFAULTADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAENS0kOn/fF37zQHt+3fQgYGN9TW5NgHSNcm+XPUVw+/pueDucZHjqiJQReQ0Y1tXRg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHPdLbFVuCzflHAYX8l6cHglhfBr/55hBHnBABRENL/YP4lnEOftBl+SmFZqdSW8+g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "71af7020-bb99-48f4-8a1c-c7462596bfc2",
+                            SecurityStamp = "3402184d-2a88-4ec6-a801-8227471613ba",
                             TwoFactorEnabled = false,
                             UserName = "DefaultAdmin"
                         });

@@ -53,6 +53,7 @@ try
         options.AddPolicy("AllowedPolicies", corsBuilder =>
         {
             corsBuilder.WithOrigins("https://localhost:7171").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+            corsBuilder.WithOrigins("https://localhost:7017").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
         });
     });
 
@@ -89,8 +90,6 @@ try
 
     app.UseRouting();
     app.UseCors("AllowedPolicies");
-
-    app.UseAuthorization();
 
     app.UseAuthentication();
     app.UseAuthorization();

@@ -17,6 +17,7 @@ public class IdentityContext : IdentityDbContext, IIdentityContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        SeedAdmin.Initialize(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(builder);
     }

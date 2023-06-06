@@ -16,9 +16,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{E4889D4F-8199-45DF-93A5-2AD03528C11A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{026C4C78-6295-44EC-87F3-63FFE0C269D2}"
-	ProjectSection(SolutionItems) = preProject
-		EndAuth.Shared\DependencyInjection.cs = EndAuth.Shared\DependencyInjection.cs
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EndAuth.Shared", "EndAuth.Shared\EndAuth.Shared.csproj", "{E5D35A31-848C-437E-AD52-3F03FE35A725}"
 EndProject
@@ -30,7 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests.Application", "Un
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EndAuthSimpleClient", "EndAuthSimpleClient\EndAuthSimpleClient.csproj", "{CF3B1793-183A-4B6C-A0CA-2B96D140B977}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndAuth.Infrastructure", "EndAuth.Infrastructure\EndAuth.Infrastructure.csproj", "{40F9FF5F-8BF3-4D6C-B409-AB000478044C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EndAuth.Infrastructure", "EndAuth.Infrastructure\EndAuth.Infrastructure.csproj", "{40F9FF5F-8BF3-4D6C-B409-AB000478044C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMinimalAPI", "SimpleMinimalAPI\SimpleMinimalAPI.csproj", "{6EF4C47B-9E84-41C3-B0E8-41CFA626BC99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,6 +73,10 @@ Global
 		{40F9FF5F-8BF3-4D6C-B409-AB000478044C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40F9FF5F-8BF3-4D6C-B409-AB000478044C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40F9FF5F-8BF3-4D6C-B409-AB000478044C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EF4C47B-9E84-41C3-B0E8-41CFA626BC99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EF4C47B-9E84-41C3-B0E8-41CFA626BC99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EF4C47B-9E84-41C3-B0E8-41CFA626BC99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EF4C47B-9E84-41C3-B0E8-41CFA626BC99}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
