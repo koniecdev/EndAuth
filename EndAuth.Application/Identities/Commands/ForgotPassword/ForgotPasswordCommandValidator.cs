@@ -1,5 +1,4 @@
 ﻿using EndAuth.Shared.Identities.Commands.ForgotPassword;
-using EndAuth.Shared.Identities.Commands.Login;
 using FluentValidation;
 
 namespace EndAuth.Application.Identities.Commands.ForgotPassword;

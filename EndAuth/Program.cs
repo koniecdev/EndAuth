@@ -65,8 +65,9 @@ try
     }).AddJwtBearer(m =>
     {
         m.SaveToken = true;
-        m.TokenValidationParameters = new TokenParametersFactory(builder.Configuration).Create();
+        m.TokenValidationParameters = TokenParametersFactory.Create(builder.Configuration);
     });
+
     builder.Services.AddAuthorization();
 
     builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

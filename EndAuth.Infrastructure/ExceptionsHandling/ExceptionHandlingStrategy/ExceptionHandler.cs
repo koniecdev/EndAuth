@@ -1,6 +1,6 @@
 ﻿namespace EndAuth.Infrastructure.ExceptionsHandling.ExceptionHandlingStrategy;
 
-public class ExceptionHandler
+internal sealed class ExceptionHandler
 {
     private readonly IExceptionHandlerStrategy _exceptionHandlerStrategy;
 

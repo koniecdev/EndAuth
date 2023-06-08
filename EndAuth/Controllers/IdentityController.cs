@@ -1,9 +1,7 @@
 using EndAuth.Shared.Identities.Commands.Register;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using EndAuth.Shared.Identities.Commands.Refresh;
 using EndAuth.Shared.Identities.Commands.Login;
-using Microsoft.AspNetCore.Cors;
 using EndAuth.API.Controllers.Common;
 using EndAuth.Shared.Identities.Commands.ForgotPassword;
 using EndAuth.Shared.Identities.Commands.ResetPassword;

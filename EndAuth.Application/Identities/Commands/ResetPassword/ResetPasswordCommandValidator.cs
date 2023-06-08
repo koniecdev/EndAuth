@@ -1,5 +1,4 @@
-﻿using EndAuth.Shared.Identities.Commands.Login;
-using EndAuth.Shared.Identities.Commands.ResetPassword;
+﻿using EndAuth.Shared.Identities.Commands.ResetPassword;
 using FluentValidation;
 
 namespace EndAuth.Application.Identities.Commands.Login;

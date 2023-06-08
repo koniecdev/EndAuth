@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EndAuth.Persistance.Configurations;
-public class PasswordResetTokenConfiguration : IEntityTypeConfiguration<PasswordResetToken>
+internal sealed class PasswordResetTokenConfiguration : IEntityTypeConfiguration<PasswordResetToken>
 {
     public void Configure(EntityTypeBuilder<PasswordResetToken> builder)
     {
