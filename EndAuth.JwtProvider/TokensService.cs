@@ -49,7 +49,7 @@ internal sealed class TokensService<TUser> : ITokensService<TUser> where TUser :
 
         var user = await _userManager.FindByIdAsync(userId);
         var refreshTokenFromDb = await _db.RefreshTokens.SingleOrDefaultAsync(m => m.Token.Equals(refreshToken), cancellationToken)
-            ?? throw new InvalidRefreshTokenException(refreshToken);
+            ?? throw new InvalidTokenException(refreshToken);
 
         await _refreshTokenService.ValidateRefreshToken(jwt, principal, refreshTokenFromDb, cancellationToken);
 
