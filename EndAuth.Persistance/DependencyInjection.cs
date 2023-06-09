@@ -12,7 +12,7 @@ public static class DependencyInjection{
     public static IServiceCollection AddPersistance(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<IdentityContext>(o => o.UseSqlServer(configuration.GetConnectionString("DefaultDatabase")));
-        services.AddDefaultIdentity<ApplicationUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
+        services.AddDefaultIdentity<ApplicationUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
         services.AddScoped<IIdentityContext, IdentityContext>(); 
         return services;
     }

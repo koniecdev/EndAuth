@@ -6,6 +6,7 @@ using EndAuth.Shared.Identities.Commands.ForgotPassword;
 using FluentEmail.Core;
 using FluentEmail.Core.Models;
 using FluentEmail.Smtp;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -14,38 +15,36 @@ namespace EndAuth.Application.Identities.Commands.ForgotPassword;
 
 public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordCommand>
 {
-    private readonly IIdentityContext _db;
-    private readonly IDateTimeService _dateTimeService;
     private readonly ILogger<ForgotPasswordCommandHandler> _logger;
     private readonly IConfiguration _configuration;
     private readonly ISmtpClientGmailFactory _smtpClientGmailFactory;
     private readonly IEmailService _emailService;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     public ForgotPasswordCommandHandler(
-        IIdentityContext db,
-        IDateTimeService dateTimeService,
         ILogger<ForgotPasswordCommandHandler> logger,
         IConfiguration configuration,
         ISmtpClientGmailFactory smtpClientGmailFactory,
-        IEmailService emailService
+        IEmailService emailService,
+        UserManager<ApplicationUser> userManager
         )
     {
-        _db = db;
-        _dateTimeService = dateTimeService;
         _logger = logger;
         _configuration = configuration;
         _smtpClientGmailFactory = smtpClientGmailFactory;
         _emailService = emailService;
+        _userManager = userManager;
     }
     public async Task Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
     {
-        ApplicationUser userFromDb = await _db.ApplicationUsers.Include(m=>m.PasswordResetTokens)
-            .SingleOrDefaultAsync(m => m.NormalizedEmail == request.Email.ToUpperInvariant(), cancellationToken)
+        var userFromDb = await _userManager.FindByEmailAsync(request.Email)
             ?? throw new ResourceNotFoundException(nameof(ApplicationUser), request.Email);
+        var passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(userFromDb);
 
-        InvalidateExistingTokens(userFromDb.PasswordResetTokens.Where(m => m.Invalidated == false));
-        
-        PasswordResetToken passwordResetToken = GeneratePasswordResetToken(userFromDb.Id);
+        if (string.IsNullOrWhiteSpace(passwordResetToken))
+        {
+            throw new Exception("Something went wrong with generating password token");
+        }
 
         string mailAddress = _configuration["Secrets:GmailLogin"];
         string mailAddressPassword = _configuration["Secrets:GmailPassword"];
@@ -59,7 +58,7 @@ public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordComman
             userFromDb.Email,
             userFromDb.UserName,
             "Password reset request",
-            $"Your password reset link: <a href=\"https://localhost:7207/api/identities/reset-password?token={passwordResetToken.Token}\">Click here</a> or paste url: https://localhost:7207/api/identities/reset-password?token={passwordResetToken.Token}",
+            $"Your password reset link: <a href=\"https://localhost:7207/api/identities/reset-password?token={passwordResetToken}\">Click here</a> or paste url: https://localhost:7207/api/identities/reset-password?email={userFromDb.Email}&token={passwordResetToken}",
             cancellationToken);
 
         if (!emailResponse.Successful)
@@ -67,29 +66,6 @@ public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordComman
             throw new EmailException(userFromDb.Email);
         }
 
-        _db.PasswordResetTokens.Add(passwordResetToken);
-        await _db.SaveChangesAsync(cancellationToken);
         _logger.LogInformation("Email has been sent to {email}", userFromDb.Email);
-    }
-
-    private PasswordResetToken GeneratePasswordResetToken(string userId)
-    {
-        return new()
-        {
-            ApplicationUserId = userId,
-            Token = Guid.NewGuid().ToString(),
-            ValidUntil = _dateTimeService.Now.AddDays(1)
-        };
-    }
-
-    private static void InvalidateExistingTokens(IEnumerable<PasswordResetToken> passwordResetTokens)
-    {
-        if (passwordResetTokens.Any())
-        {
-            foreach (PasswordResetToken? item in passwordResetTokens)
-            {
-                item.Invalidated = true;
-            }
-        }
     }
 }

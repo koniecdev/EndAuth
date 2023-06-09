@@ -2,11 +2,13 @@ using EndAuth.Application.Common.Exceptions;
 using EndAuth.Application.Common.Interfaces;
 using EndAuth.Application.Common.Interfaces.Factories;
 using EndAuth.Application.Identities.Commands.ForgotPassword;
+using EndAuth.Domain.Entities;
 using EndAuth.Shared.Identities.Commands.ForgotPassword;
 using EndAuth.Shared.Identities.Commands.Login;
 using FluentAssertions;
 using FluentEmail.Core.Models;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System.Net.Mail;
@@ -19,6 +21,21 @@ public class ForgotPasswordCommandHandlerTests : CommandTestBase
     private readonly ForgotPasswordCommandValidator _validator;
     public ForgotPasswordCommandHandlerTests()
     {
+        var appUser = new ApplicationUser
+        {
+            UserName = "Default",
+            NormalizedUserName = "DEFAULT",
+            Email = "Default@example.com",
+            NormalizedEmail = "DEFAULT@EXAMPLE.COM"
+        };
+        var fakeUserManager = new FakeUserManagerBuilder()
+        .With(m => m.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+        .ReturnsAsync(IdentityResult.Success))
+        .With(m => m.Setup(x => x.FindByEmailAsync("Default@example.com"))
+        .ReturnsAsync(appUser))
+        .With(m=>m.Setup(x=>x.GeneratePasswordResetTokenAsync(It.IsAny<ApplicationUser>()))
+        .ReturnsAsync("someToken"))
+        .Build();
         var dateTimeMock = new Mock<IDateTimeService>();
         dateTimeMock.Setup(m => m.Now).Returns(new DateTime(2023, 1, 1, 0, 0, 0));
         var loggerMock = new Mock<ILogger<ForgotPasswordCommandHandler>>();
@@ -27,7 +44,7 @@ public class ForgotPasswordCommandHandlerTests : CommandTestBase
         var emailServiceMock = new Mock<IEmailService>();
         emailServiceMock.Setup(m => m.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), CancellationToken.None))
             .ReturnsAsync(new SendResponse());
-        _handler = new(_context, dateTimeMock.Object, loggerMock.Object, _configuration, smtpGmailSenderMock.Object, emailServiceMock.Object);
+        _handler = new(loggerMock.Object, _configuration, smtpGmailSenderMock.Object, emailServiceMock.Object, fakeUserManager.Object);
         _validator = new();
     }
 
