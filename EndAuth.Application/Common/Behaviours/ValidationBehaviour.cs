@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace EndAuth.Application.Common.Behaviours;
 
-public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, Result<TResponse>> where TRequest : notnull
+public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
     private readonly ILogger<TRequest> _logger;
@@ -12,7 +12,7 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
         _validators = validators;
         _logger = logger;
     }
-    public async Task<Result<TResponse>> Handle(TRequest request, RequestHandlerDelegate<Result<TResponse>> next, CancellationToken cancellationToken)
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
         var context = new ValidationContext<TRequest>(request);
 
@@ -25,7 +25,7 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
         if(failures.Count != 0)
         {
             _logger.LogError("Validation failed at request: {requestName}. Following errors are: {errorList}", nameof(TRequest), string.Join(",", failures));
-            return new Result<TResponse>(new ValidationException(failures));
+            throw new ValidationException(failures);
         }
 
         return await next();

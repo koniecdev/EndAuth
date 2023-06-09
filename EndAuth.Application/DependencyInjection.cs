@@ -1,5 +1,4 @@
 ﻿using EndAuth.Application.Common.Behaviours;
-using EndAuth.Application.Extensions;
 using EndAuth.Shared.Identities.Commands.Login;
 using EndAuth.Shared.Identities.Commands.Register;
 using FluentValidation;
@@ -15,8 +14,7 @@ public static class DependencyInjection
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly())
         .AddOpenBehavior(typeof(PerformanceBehaviour<,>))
-        .AddValidation<RegisterUserCommand, string>()
-        .AddValidation<LoginUserCommand, string>());
+        .AddOpenBehavior(typeof(ValidationBehaviour<,>)));
         return services;
     }
 }
