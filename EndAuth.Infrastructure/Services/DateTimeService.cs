@@ -2,7 +2,7 @@
 
 namespace EndAuth.Infrastructure.Services;
 
-public class DateTimeService : IDateTimeService
+internal sealed class DateTimeService : IDateTimeService
 {
     public DateTimeOffset Now => DateTimeOffset.Now;
 }

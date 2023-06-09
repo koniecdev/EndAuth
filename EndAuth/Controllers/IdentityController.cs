@@ -1,42 +1,48 @@
 using EndAuth.Shared.Identities.Commands.Register;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using EndAuth.Shared.Identities.Commands.Refresh;
 using EndAuth.Shared.Identities.Commands.Login;
-using Microsoft.AspNetCore.Cors;
+using EndAuth.API.Controllers.Common;
+using EndAuth.Shared.Identities.Commands.ForgotPassword;
+using EndAuth.Shared.Identities.Commands.ResetPassword;
 
 namespace EndAuth.Controllers;
 
-[ApiController]
-[EnableCors("AllowedPolicies")]
 [Route("/api/identities")]
-public class IdentityController : ControllerBase
+public class IdentityController : BaseController
 {
-    private readonly IMediator _mediator;
-
-    public IdentityController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterUserCommand registerDto)
     {
-        await _mediator.Send(registerDto);
+        await Mediator.Send(registerDto);
         return Ok();
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginUserCommand loginDto)
     {
-        var result = await _mediator.Send(loginDto);
+        var result = await Mediator.Send(loginDto);
         return Ok(result);
     }
 
     [HttpPost("refresh")]
     public async Task<IActionResult> Refresh([FromBody] RefreshTokensCommand refreshTokensDto)
     {
-        var result = await _mediator.Send(refreshTokensDto);
+        var result = await Mediator.Send(refreshTokensDto);
         return Ok(result);
+    }
+
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordCommand forgotPasswordDto)
+    {
+        await Mediator.Send(forgotPasswordDto);
+        return Ok();
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand resetPasswordDto)
+    {
+        await Mediator.Send(resetPasswordDto);
+        return Ok();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace EndAuth.Infrastructure.ExceptionsHandling.ExceptionHandlingStrategy;
 
-public class ResourceNotFoundExceptionHandlerStrategy : IExceptionHandlerStrategy
+internal sealed class ResourceNotFoundExceptionHandlerStrategy : IExceptionHandlerStrategy
 {
     public int Handle()
     {

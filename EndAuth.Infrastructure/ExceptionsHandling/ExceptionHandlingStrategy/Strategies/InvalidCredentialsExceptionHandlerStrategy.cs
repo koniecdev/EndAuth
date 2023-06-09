@@ -2,7 +2,7 @@
 
 namespace EndAuth.Infrastructure.ExceptionsHandling.ExceptionHandlingStrategy;
 
-public class InvalidCredentialsExceptionHandlerStrategy : IExceptionHandlerStrategy
+internal sealed class InvalidCredentialsExceptionHandlerStrategy : IExceptionHandlerStrategy
 {
     public int Handle()
     {

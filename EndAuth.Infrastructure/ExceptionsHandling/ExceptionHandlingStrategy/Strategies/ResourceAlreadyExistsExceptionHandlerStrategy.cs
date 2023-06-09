@@ -2,7 +2,7 @@
 
 namespace EndAuth.Infrastructure.ExceptionsHandling.ExceptionHandlingStrategy;
 
-public class ResourceAlreadyExistsExceptionHandlerStrategy : IExceptionHandlerStrategy
+internal sealed class ResourceAlreadyExistsExceptionHandlerStrategy : IExceptionHandlerStrategy
 {
     public int Handle()
     {

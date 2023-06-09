@@ -9,7 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace EndAuth.JwtProvider.Services;
-public class TokensService<TUser> : ITokensService<TUser> where TUser : IdentityUser
+internal sealed class TokensService<TUser> : ITokensService<TUser> where TUser : IdentityUser
 {
     private readonly UserManager<TUser> _userManager;
     private readonly IIdentityContext _db;

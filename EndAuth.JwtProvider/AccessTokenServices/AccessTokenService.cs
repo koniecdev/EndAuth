@@ -9,12 +9,11 @@ using System.Security.Claims;
 using System.Text;
 
 namespace EndAuth.JwtProvider.AccessTokenServices;
-public class AccessTokenService<TUser> : IAccessTokenService<TUser> where TUser : IdentityUser
+internal sealed class AccessTokenService<TUser> : IAccessTokenService<TUser> where TUser : IdentityUser
 {
     private readonly UserManager<TUser> _userManager;
     private readonly IConfiguration _configuration;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly ITokenParametersFactory _tokenParametersFactory;
     private readonly IDateTimeService _dateTimeService;
     private readonly TokenValidationParameters _tokenValidationParameters;
 
@@ -22,15 +21,13 @@ public class AccessTokenService<TUser> : IAccessTokenService<TUser> where TUser 
         UserManager<TUser> userManager,
         IConfiguration configuration,
         IHttpContextAccessor httpContextAccessor,
-        ITokenParametersFactory tokenParametersFactory,
         IDateTimeService dateTimeService)
     {
         _userManager = userManager;
         _configuration = configuration;
         _httpContextAccessor = httpContextAccessor;
-        _tokenParametersFactory = tokenParametersFactory;
         _dateTimeService = dateTimeService;
-        _tokenValidationParameters = _tokenParametersFactory.Create();
+        _tokenValidationParameters = TokenParametersFactory.CreateWithoutLifetimeValidation(configuration);
     }
 
     public SigningCredentials GetSigningCredentials()

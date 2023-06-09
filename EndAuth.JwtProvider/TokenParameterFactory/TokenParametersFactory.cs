@@ -4,27 +4,27 @@ using System.Text;
 
 namespace EndAuth.JwtProvider.TokenParameterFactory;
 
-public class TokenParametersFactory : ITokenParametersFactory
+public static class TokenParametersFactory
 {
-    private readonly IConfiguration _configuration;
-
-    public TokenParametersFactory(IConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
-
-    public TokenValidationParameters Create()
+    public static TokenValidationParameters Create(IConfiguration configuration)
     {
         return new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["JwtSettings:Key"]!)),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["JwtSettings:Key"]!)),
             ValidateIssuer = true,
             ValidateAudience = false,
             ValidateLifetime = true,
             ClockSkew = TimeSpan.Zero,
-            ValidIssuer = _configuration["JwtSettings:Issuer"],
-            ValidAudience = _configuration["JwtSettings:Audience"],
+            ValidIssuer = configuration["JwtSettings:Issuer"],
+            ValidAudience = configuration["JwtSettings:Audience"],
         };
+    }
+
+    public static TokenValidationParameters CreateWithoutLifetimeValidation(IConfiguration configuration)
+    {
+        TokenValidationParameters parameters = Create(configuration);
+        parameters.ValidateLifetime = false;
+        return parameters;
     }
 }

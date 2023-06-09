@@ -1,4 +1,5 @@
-﻿using EndAuth.Persistance.Contexts.IdentityDb;
+﻿using EndAuth.Domain.Entities;
+using EndAuth.Persistance.Contexts.IdentityDb;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -20,9 +21,9 @@ public class IdentityContextMockFactory : IDbContextMockFactory<IdentityContext>
 
         //Remember - Seed of database are also applied - keep tracking of int IDs
 
-        var passwordHasher = new PasswordHasher<IdentityUser>();
+        var passwordHasher = new PasswordHasher<ApplicationUser>();
 
-        var user = new IdentityUser
+        var user = new ApplicationUser
         {
             UserName = "Default",
             NormalizedUserName = "DEFAULT",

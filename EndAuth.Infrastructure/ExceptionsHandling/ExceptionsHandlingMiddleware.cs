@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace EndAuth.Infrastructure.ExceptionsHandling;
 
-public class ExceptionsHandlingMiddleware
+internal sealed class ExceptionsHandlingMiddleware
 {
     private readonly RequestDelegate _next;
 

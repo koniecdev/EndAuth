@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace EndAuth.JwtProvider.AccessTokenServices;
-public class RefreshTokenService<TUser> : IRefreshTokenService<TUser> where TUser : IdentityUser
+internal sealed class RefreshTokenService<TUser> : IRefreshTokenService<TUser> where TUser : IdentityUser
 {
     private readonly UserManager<TUser> _userManager;
     private readonly IIdentityContext _db;

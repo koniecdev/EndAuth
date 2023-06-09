@@ -2,7 +2,7 @@
 
 namespace EndAuth.Infrastructure.ExceptionsHandling.ExceptionHandlingStrategy;
 
-public class DefaultExceptionHandlerStrategy : IExceptionHandlerStrategy
+internal sealed class DefaultExceptionHandlerStrategy : IExceptionHandlerStrategy
 {
     public int Handle()
     {
