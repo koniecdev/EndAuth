@@ -1,7 +1,6 @@
 ﻿using EndAuth.Domain.Entities;
 using EndAuth.Shared.Identities.Commands.ResetPassword;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace EndAuth.Application.Identities.Commands.ResetPassword;
 public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand>

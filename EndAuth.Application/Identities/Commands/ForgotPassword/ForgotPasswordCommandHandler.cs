@@ -1,14 +1,10 @@
-﻿using EndAuth.Application.Common.Exceptions;
-using EndAuth.Application.Common.Interfaces;
-using EndAuth.Application.Common.Interfaces.Factories;
+﻿using EndAuth.Application.Common.Interfaces.Factories;
 using EndAuth.Domain.Entities;
 using EndAuth.Shared.Identities.Commands.ForgotPassword;
-using EndAuth.Shared.Users.Commands.Delete;
 using FluentEmail.Core;
 using FluentEmail.Core.Models;
 using FluentEmail.Smtp;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 

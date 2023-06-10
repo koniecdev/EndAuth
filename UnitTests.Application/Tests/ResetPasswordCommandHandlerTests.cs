@@ -1,20 +1,12 @@
 using EndAuth.Application.Common.Exceptions;
-using EndAuth.Application.Common.Interfaces;
-using EndAuth.Application.Common.Interfaces.Factories;
-using EndAuth.Application.Identities.Commands.ForgotPassword;
 using EndAuth.Application.Identities.Commands.Login;
 using EndAuth.Application.Identities.Commands.ResetPassword;
 using EndAuth.Domain.Entities;
-using EndAuth.Shared.Identities.Commands.ForgotPassword;
-using EndAuth.Shared.Identities.Commands.Login;
 using EndAuth.Shared.Identities.Commands.ResetPassword;
 using FluentAssertions;
-using FluentEmail.Core.Models;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 using Moq;
-using System.Net.Mail;
 using UnitTests.Application.Common;
 
 namespace UnitTests.Application.Tests;

@@ -4,8 +4,6 @@ using EndAuth.Application.Common.Interfaces.Factories;
 using EndAuth.Application.Identities.Commands.ForgotPassword;
 using EndAuth.Domain.Entities;
 using EndAuth.Shared.Identities.Commands.ForgotPassword;
-using EndAuth.Shared.Identities.Commands.Login;
-using EndAuth.Shared.Users.Commands.Delete;
 using FluentAssertions;
 using FluentEmail.Core.Models;
 using FluentValidation;

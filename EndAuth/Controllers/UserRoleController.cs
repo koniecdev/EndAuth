@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Cors;
 using EndAuth.API.Controllers.Common;
 using Microsoft.AspNetCore.Authorization;
-using EndAuth.Shared.Dtos.Users;
-using EndAuth.Shared.Dtos.Roles;
+using EndAuth.Shared.Users.Commands.Update;
+using EndAuth.Shared.Users.Commands.Delete;
 
 namespace EndAuth.Controllers;
 
@@ -11,14 +10,14 @@ namespace EndAuth.Controllers;
 [Route("/api/user-roles")]
 public class UserRoleController : BaseController
 {
-    [HttpPost]
-    public async Task<IActionResult> AddUserToRole()
+    [HttpPost("promote")]
+    public async Task<IActionResult> PromoteToRole([FromBody] PromoteToRoleCommand promoteToRoleCommand)
     {
         return NoContent();
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> DeleteUserFromRole()
+    [HttpPost("demote")]
+    public async Task<IActionResult> DemoteFromRole([FromBody] DemoteFromRoleCommand demoteFromRoleCommand)
     {
         return NoContent();
     }

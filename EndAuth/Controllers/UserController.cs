@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Cors;
 using EndAuth.API.Controllers.Common;
-using Microsoft.AspNetCore.Authorization;
-using System.Runtime.CompilerServices;
 using EndAuth.Shared.Dtos.Users;
+using EndAuth.Shared.Users.Commands.Update;
 
 namespace EndAuth.Controllers;
 
@@ -18,20 +16,20 @@ public class UserController : BaseController
     }
 
     [HttpGet("{idOrEmail}")]
-    public async Task<IActionResult> Get(string idOrEmail)
+    public async Task<IActionResult> Get([FromRoute] string idOrEmail)
     {
         UserResponse results = null;
         return Ok(results);
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update()
+    public async Task<IActionResult> Update([FromBody] UpdateUserCommand updateUserCommand)
     {
         return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete([FromRoute] string id)
     {
         return NoContent();
     }

@@ -1,6 +1,4 @@
-﻿using EndAuth.Application.Common.Exceptions;
-using EndAuth.Application.Common.Interfaces;
-using EndAuth.Domain.Entities;
+﻿using EndAuth.Domain.Entities;
 using EndAuth.Shared.Dtos.Identites;
 using EndAuth.Shared.Identities.Commands.Login;
 using Microsoft.AspNetCore.Identity;
