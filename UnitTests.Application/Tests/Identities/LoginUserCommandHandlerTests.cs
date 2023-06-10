@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Moq;
 using UnitTests.Application.Common;
 
-namespace UnitTests.Application.Tests;
+namespace UnitTests.Application.Tests.Identities;
 public class LoginUserCommandHandlerTest : CommandTestBase
 {
     private readonly LoginUserCommandHandler _handler;
@@ -36,7 +36,7 @@ public class LoginUserCommandHandlerTest : CommandTestBase
                 It.IsAny<bool>()))
         .ReturnsAsync(SignInResult.Failed))
         .With(x => x.Setup(sm => sm.PasswordSignInAsync(
-                It.Is<ApplicationUser>(m=>m.Equals(appUser)),
+                It.Is<ApplicationUser>(m => m.Equals(appUser)),
                 It.Is<string>(xd => xd == "Default123$"),
                 It.IsAny<bool>(),
                 It.IsAny<bool>()))

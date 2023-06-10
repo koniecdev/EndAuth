@@ -5,7 +5,7 @@ using EndAuth.Shared.Dtos.Roles;
 using EndAuth.Shared.Roles.Commands.Create;
 using EndAuth.Shared.Roles.Commands.Update;
 
-namespace EndAuth.Controllers;
+namespace EndAuth.API.Controllers;
 
 [Authorize(Roles = $"{SD.SuperAdminRole}")]
 [Route("/api/roles")]

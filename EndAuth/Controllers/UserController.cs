@@ -3,7 +3,7 @@ using EndAuth.API.Controllers.Common;
 using EndAuth.Shared.Dtos.Users;
 using EndAuth.Shared.Users.Commands.Update;
 
-namespace EndAuth.Controllers;
+namespace EndAuth.API.Controllers;
 
 [Route("/api/users")]
 public class UserController : BaseController

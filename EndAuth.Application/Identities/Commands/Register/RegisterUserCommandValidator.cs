@@ -1,5 +1,4 @@
 ﻿using EndAuth.Shared.Identities.Commands.Register;
-using FluentValidation;
 
 namespace EndAuth.Application.Identities.Commands.Register;
 

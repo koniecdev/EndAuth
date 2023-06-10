@@ -1,5 +1,4 @@
 using EndAuth.Application.Common.Exceptions;
-using EndAuth.Application.Identities.Commands.Login;
 using EndAuth.Application.Identities.Commands.ResetPassword;
 using EndAuth.Domain.Entities;
 using EndAuth.Shared.Identities.Commands.ResetPassword;
@@ -9,12 +8,12 @@ using Microsoft.AspNetCore.Identity;
 using Moq;
 using UnitTests.Application.Common;
 
-namespace UnitTests.Application.Tests;
+namespace UnitTests.Application.Tests.Identities;
 public class ResetPasswordCommandHandlerTests : CommandTestBase
 {
     private readonly ResetPasswordCommandHandler _handler;
     private readonly ResetPasswordCommandValidator _validator;
-    private readonly ApplicationUser _appUser = new ()
+    private readonly ApplicationUser _appUser = new()
     {
         UserName = "Default",
         NormalizedUserName = "DEFAULT",

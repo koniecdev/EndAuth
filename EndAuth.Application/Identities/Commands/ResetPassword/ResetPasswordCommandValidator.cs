@@ -1,7 +1,6 @@
 ﻿using EndAuth.Shared.Identities.Commands.ResetPassword;
-using FluentValidation;
 
-namespace EndAuth.Application.Identities.Commands.Login;
+namespace EndAuth.Application.Identities.Commands.ResetPassword;
 public class ResetPasswordCommandValidator : AbstractValidator<ResetPasswordCommand>
 {
     public ResetPasswordCommandValidator()

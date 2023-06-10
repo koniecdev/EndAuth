@@ -2,7 +2,7 @@
 using EndAuth.Shared.Dtos.Identites;
 using EndAuth.Shared.Identities.Commands.Refresh;
 
-namespace EndAuth.Application.Identities.Commands.Login;
+namespace EndAuth.Application.Identities.Commands.RefreshTokens;
 public class RefreshTokensCommandHandler : IRequestHandler<RefreshTokensCommand, AuthSuccessResponse>
 {
     private readonly ITokensService<ApplicationUser> _jwtService;

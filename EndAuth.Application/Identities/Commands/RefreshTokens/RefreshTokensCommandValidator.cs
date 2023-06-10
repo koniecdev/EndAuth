@@ -1,7 +1,6 @@
 ﻿using EndAuth.Shared.Identities.Commands.Refresh;
-using FluentValidation;
 
-namespace EndAuth.Application.Identities.Commands.Login;
+namespace EndAuth.Application.Identities.Commands.RefreshTokens;
 public class RefreshTokensCommandValidator : AbstractValidator<RefreshTokensCommand>
 {
     public RefreshTokensCommandValidator()

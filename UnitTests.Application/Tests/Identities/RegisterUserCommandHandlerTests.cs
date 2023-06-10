@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Moq;
 using UnitTests.Application.Common;
 
-namespace UnitTests.Application.Tests;
+namespace UnitTests.Application.Tests.Identities;
 public class RegisterUserCommandHandlerTest : CommandTestBase
 {
     private readonly RegisterUserCommandHandler _handler;
@@ -16,7 +16,7 @@ public class RegisterUserCommandHandlerTest : CommandTestBase
     public RegisterUserCommandHandlerTest()
     {
         var fakeUserManager = new FakeUserManagerBuilder()
-        .With(m=>m.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+        .With(m => m.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
         .ReturnsAsync(IdentityResult.Success))
         .With(m => m.Setup(x => x.FindByNameAsync("Default"))
         .ReturnsAsync(new ApplicationUser()))

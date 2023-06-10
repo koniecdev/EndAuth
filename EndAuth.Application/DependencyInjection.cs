@@ -1,9 +1,8 @@
 ﻿using EndAuth.Application.Common.Behaviours;
-using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace EndAuth.Shared;
+namespace EndAuth.Application;
 
 public static class DependencyInjection
 {

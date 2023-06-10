@@ -1,5 +1,4 @@
 ﻿using EndAuth.Shared.Identities.Commands.ForgotPassword;
-using FluentValidation;
 
 namespace EndAuth.Application.Identities.Commands.ForgotPassword;
 public class ForgotPasswordCommandValidator : AbstractValidator<ForgotPasswordCommand>

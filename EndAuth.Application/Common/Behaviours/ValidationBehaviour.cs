@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 namespace EndAuth.Application.Common.Behaviours;
 

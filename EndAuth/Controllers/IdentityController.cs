@@ -6,7 +6,7 @@ using EndAuth.API.Controllers.Common;
 using EndAuth.Shared.Identities.Commands.ForgotPassword;
 using EndAuth.Shared.Identities.Commands.ResetPassword;
 
-namespace EndAuth.Controllers;
+namespace EndAuth.API.Controllers;
 
 [Route("/api/identities")]
 public class IdentityController : BaseController

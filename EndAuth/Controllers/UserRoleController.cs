@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using EndAuth.Shared.Users.Commands.Update;
 using EndAuth.Shared.Users.Commands.Delete;
 
-namespace EndAuth.Controllers;
+namespace EndAuth.API.Controllers;
 
 [Authorize(Roles = $"{SD.SuperAdminRole}")]
 [Route("/api/user-roles")]

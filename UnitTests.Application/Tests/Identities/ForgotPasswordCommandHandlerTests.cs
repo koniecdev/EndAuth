@@ -13,7 +13,7 @@ using Moq;
 using System.Net.Mail;
 using UnitTests.Application.Common;
 
-namespace UnitTests.Application.Tests;
+namespace UnitTests.Application.Tests.Identities;
 public class ForgotPasswordCommandHandlerTests : CommandTestBase
 {
     private readonly ForgotPasswordCommandHandler _handler;
@@ -32,7 +32,7 @@ public class ForgotPasswordCommandHandlerTests : CommandTestBase
         .ReturnsAsync(IdentityResult.Success))
         .With(m => m.Setup(x => x.FindByEmailAsync("Default@example.com"))
         .ReturnsAsync(appUser))
-        .With(m=>m.Setup(x=>x.GeneratePasswordResetTokenAsync(It.IsAny<ApplicationUser>()))
+        .With(m => m.Setup(x => x.GeneratePasswordResetTokenAsync(It.IsAny<ApplicationUser>()))
         .ReturnsAsync("someToken"))
         .Build();
         var dateTimeMock = new Mock<IDateTimeService>();
