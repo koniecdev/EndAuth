@@ -1,6 +1,6 @@
 ﻿using EndAuth.Application.Common.Interfaces;
 using EndAuth.Domain.Entities;
-using EndAuth.Shared.Dtos;
+using EndAuth.Shared.Dtos.Identites;
 using EndAuth.Shared.Identities.Commands.Refresh;
 
 namespace EndAuth.Application.Identities.Commands.Login;

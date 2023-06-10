@@ -5,6 +5,7 @@ using EndAuth.Shared.Identities.Commands.Login;
 using EndAuth.API.Controllers.Common;
 using EndAuth.Shared.Identities.Commands.ForgotPassword;
 using EndAuth.Shared.Identities.Commands.ResetPassword;
+using EndAuth.Shared.Users.Commands.Delete;
 
 namespace EndAuth.Controllers;
 

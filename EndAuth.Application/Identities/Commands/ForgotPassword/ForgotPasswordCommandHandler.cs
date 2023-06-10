@@ -3,6 +3,7 @@ using EndAuth.Application.Common.Interfaces;
 using EndAuth.Application.Common.Interfaces.Factories;
 using EndAuth.Domain.Entities;
 using EndAuth.Shared.Identities.Commands.ForgotPassword;
+using EndAuth.Shared.Users.Commands.Delete;
 using FluentEmail.Core;
 using FluentEmail.Core.Models;
 using FluentEmail.Smtp;

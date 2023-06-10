@@ -17,6 +17,8 @@ public static class SeedAdmin
             ConcurrencyStamp = superAdminRoleId
         });
 
+        //Use above snippet to create premade roles
+
         var appUserId = "1362245b-0494-47ea-abae-912890c0cb46";
         var appUser = new ApplicationUser
         {

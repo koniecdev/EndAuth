@@ -1,8 +1,8 @@
-﻿using EndAuth.Shared.Dtos;
-using EndAuth.Shared.Identities.Commands.Login;
+﻿using EndAuth.Shared.Identities.Commands.Login;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using EndAuth.Shared.Dtos.Identites;
 
 namespace EndAuthSimpleClient.Controllers;
 
