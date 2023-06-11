@@ -25,11 +25,13 @@ public class WeatherController : Controller
         {
             // Process the successful response from the Main API
             var weatherForecasts = await response.Content.ReadFromJsonAsync<WeatherForecast[]>();
-            return View(weatherForecasts);
+            Console.WriteLine("Success");
+            return LocalRedirect("/");
         }
         else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
             // Handle unauthorized access
+            Console.WriteLine("Unauthorized");
             return RedirectToAction("Login", "Auth");
         }
         else

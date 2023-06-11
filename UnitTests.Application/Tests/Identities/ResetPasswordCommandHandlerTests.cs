@@ -3,10 +3,7 @@ using EndAuth.Application.Identities.Commands.ResetPassword;
 using EndAuth.Domain.Entities;
 using EndAuth.Shared.Identities.Commands.ResetPassword;
 using FluentAssertions;
-using FluentValidation;
-using Microsoft.AspNetCore.Identity;
 using Moq;
-using UnitTests.Application.Common;
 
 namespace UnitTests.Application.Tests.Identities;
 public class ResetPasswordCommandHandlerTests : CommandTestBase

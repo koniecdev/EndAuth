@@ -38,6 +38,41 @@ public class FakeSignInManager : SignInManager<ApplicationUser>
     { }
 }
 
+public class FakeRoleManager : RoleManager<IdentityRole>
+{
+    public FakeRoleManager()
+        :base(
+                new Mock<IRoleStore<IdentityRole>>().Object,
+                Array.Empty<IRoleValidator<IdentityRole>>(),
+                new Mock<ILookupNormalizer>().Object,
+                new Mock<IdentityErrorDescriber>().Object,
+                new Mock<ILogger<RoleManager<IdentityRole>>>().Object)
+    { }
+}
+public class FakeRoleManagerBuilder
+{
+    private readonly Mock<FakeRoleManager> _mock = new();
+
+    public FakeRoleManagerBuilder With(Action<Mock<FakeRoleManager>> mock)
+    {
+        var list = new List<IdentityRole>()
+        {
+            new IdentityRole("SuperAdmin"),
+            new IdentityRole("Admin"),
+            new IdentityRole("Moderator")
+        }
+        .AsQueryable();
+        _mock.Setup(r => r.Roles).Returns(list);
+        mock(_mock);
+        return this;
+    }
+
+    public Mock<FakeRoleManager> Build()
+    {
+        return _mock;
+    }
+}
+
 public class FakeUserManagerBuilder
 {
     private readonly Mock<FakeUserManager> _mock = new();
